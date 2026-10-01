@@ -1,0 +1,305 @@
+defmodule Rivet.Mailer.Monitor do
+  use Rivet.Mailer
+
+  # move to configs
+  @default_stuck_after 60 * 60
+  @default_pending_after 60 * 60
+  @default_failed_within 24 * 60 * 60
+  @default_limit 100
+
+  @doc """
+  Produces a human-readable report of suspicious/problem mailer records.
+
+  Options:
+
+    :stuck_after
+      Seconds a claimed :pending send may remain locked before being
+      considered stranded.
+
+    :pending_after
+      Seconds an unlocked :pending send may sit in the queue before being
+      considered suspicious.
+
+    :failed_within
+      Report :failed sends updated within this many seconds.
+
+    :limit
+      Maximum rows shown per section.
+
+  The time thresholds should be set comfortably above normal queue/batch
+  processing times.
+  """
+
+  def report() do
+    stuck_after = Mailer.getcfg(:stuck_after)
+    pending_after = Mailer.getcfg(:pending_after)
+    failed_within = Mailer.getcfg(:failed_within)
+    limit = 100
+
+    sections = [
+      section(
+        "STRANDED CLAIMS",
+        stranded_claims(stuck_after, limit),
+        limit
+      ),
+      section(
+        "OLD PENDING",
+        old_pending(pending_after, limit),
+        limit
+      ),
+      section(
+        "FAILED / PROBLEM SENDS",
+        recent_failures(failed_within, limit),
+        limit
+      ),
+      section(
+        "INCONSISTENT RECORDS",
+        inconsistent(limit),
+        limit
+      )
+    ]
+    |> Enum.reject(&is_nil/1)
+
+    # timestamp =
+    #   DateTime.utc_now()
+    #   |> DateTime.truncate(:second)
+    #   |> DateTime.to_iso8601()
+    #
+    # case sections do
+    #   [] ->
+    #     "Mailer watchdog #{timestamp}: OK"
+    #
+    #   sections ->
+    #     [
+    #       "Mailer watchdog #{timestamp}",
+    #       "",
+    #       Enum.join(sections, "\n\n")
+    #     ]
+    #     |> IO.iodata_to_binary()
+    # end
+  end
+
+  ##############################################################################
+  # A worker claimed this send but never finished it.
+  #
+  # locked_at is important here. inserted_at cannot tell us how long the
+  # record has actually been claimed.
+  defp stranded_claims(seconds, limit) do
+    from(s in Mailer.Dispatch,
+      join: t in assoc(s, :target),
+      where: s.status == :pending,
+      where: not is_nil(s.lock),
+      where: not is_nil(s.locked_at),
+      where:
+        s.locked_at <
+          fragment(
+            "now() - (? * interval '1 second')",
+            ^seconds
+          ),
+      order_by: [asc: s.locked_at],
+      limit: ^(limit + 1),
+      select: %{
+        id: s.id,
+        status: s.status,
+        template: s.template,
+        address: t.address,
+        sender_id: s.sender_id,
+        lock: s.lock,
+        timestamp: s.locked_at,
+        age:
+          fragment(
+            "extract(epoch from (now() - ?))::bigint",
+            s.locked_at
+          )
+      }
+    )
+    |> Repo.all()
+  end
+
+  ##############################################################################
+  # Nothing has claimed these at all. This catches such things as the processor
+  # being dead/disabled/misconfigured rather than an individual worker dying.
+  defp old_pending(seconds, limit) do
+    from(s in Mailer.Dispatch,
+      join: t in assoc(s, :target),
+      where: s.status == :pending,
+      where: is_nil(s.lock),
+      where: is_nil(s.sent_at),
+      where:
+        s.inserted_at <
+          fragment(
+            "now() - (? * interval '1 second')",
+            ^seconds
+          ),
+      order_by: [asc: s.inserted_at],
+      limit: ^(limit + 1),
+      select: %{
+        id: s.id,
+        status: s.status,
+        template: s.template,
+        address: t.address,
+        sender_id: s.sender_id,
+        lock: s.lock,
+        timestamp: s.inserted_at,
+        age:
+          fragment(
+            "extract(epoch from (now() - ?))::bigint",
+            s.inserted_at
+          )
+      }
+    )
+    |> Repo.all()
+  end
+
+  ##############################################################################
+  # This deliberately includes both provider-reported problems and failures
+  # which occurred while attempting the send. Mailer.Dispatch only gives us the
+  # coarse :failed state; Dispatch.Log / Email.Issue have the details.
+  defp recent_failures(seconds, limit) do
+    from(s in Mailer.Dispatch,
+      join: t in assoc(s, :target),
+      where: s.status == :failed,
+      where:
+        s.updated_at >=
+          fragment(
+            "now() - (? * interval '1 second')",
+            ^seconds
+          ),
+      order_by: [desc: s.updated_at],
+      limit: ^(limit + 1),
+      select: %{
+        id: s.id,
+        status: s.status,
+        template: s.template,
+        address: t.address,
+        sender_id: s.sender_id,
+        lock: s.lock,
+        timestamp: s.updated_at,
+        age:
+          fragment(
+            "extract(epoch from (now() - ?))::bigint",
+            s.updated_at
+          )
+      }
+    )
+    |> Repo.all()
+  end
+
+  ##############################################################################
+  # Things which violate the intended Dispatch/Target invariants.
+  #
+  # Notably absent:
+  #
+  #   target.email_id == nil
+  #   target.user_id == nil
+  #
+  # Both are perfectly valid for direct/historical targets.
+  #
+  # Also absent:
+  #
+  #   dispatched && sender_id == nil
+  #
+  # because SMTP may legitimately dispatch without a provider sender ID.
+  defp inconsistent(limit) do
+    from(s in Mailer.Dispatch,
+      join: t in assoc(s, :target),
+      where:
+        # Pending should not already look sent.
+        (s.status == :pending and
+           (not is_nil(s.sent_at) or not is_nil(s.sender_id))) or
+
+          # Completed/failed processing should not retain a worker lock.
+          (s.status != :pending and not is_nil(s.lock)) or
+
+          # lock and locked_at should agree.
+          (is_nil(s.lock) and not is_nil(s.locked_at)) or
+          (not is_nil(s.lock) and is_nil(s.locked_at)) or
+
+          # Dispatch means we attempted and successfully handed it off.
+          (s.status == :dispatched and is_nil(s.sent_at)) or
+
+          # Every Target should retain the actual destination snapshot.
+          is_nil(t.address) or
+          t.address == "",
+      order_by: [asc: s.inserted_at],
+      limit: ^(limit + 1),
+      select: %{
+        id: s.id,
+        status: s.status,
+        template: s.template,
+        address: t.address,
+        sender_id: s.sender_id,
+        lock: s.lock,
+        locked_at: s.locked_at,
+        sent_at: s.sent_at,
+        timestamp: s.updated_at,
+        age:
+          fragment(
+            "extract(epoch from (now() - ?))::bigint",
+            s.updated_at
+          )
+      }
+    )
+    |> Repo.all()
+  end
+
+  ##############################################################################
+  defp section(_title, [], _limit), do: nil
+
+  defp section(title, rows, limit) do
+    {rows, overflow} =
+      if length(rows) > limit do
+        {Enum.take(rows, limit), true}
+      else
+        {rows, false}
+      end
+
+    body =
+      rows
+      |> Enum.map(&format_row/1)
+      |> Enum.join("\n")
+
+    suffix =
+      if overflow do
+        "\n  ... additional records omitted"
+      else
+        ""
+      end
+
+    "#{title} (#{length(rows)}#{if overflow, do: "+", else: ""})\n#{body}#{suffix}"
+  end
+
+  defp format_row(row) do
+    pieces = [
+      "id=#{row.id}",
+      "status=#{row.status}",
+      "age=#{format_age(row.age)}",
+      "template=#{inspect(row.template)}",
+      "address=#{inspect(row.address)}",
+      optional("sender", row.sender_id),
+      optional("lock", row.lock),
+      optional("locked_at", Map.get(row, :locked_at)),
+      optional("sent_at", Map.get(row, :sent_at))
+    ]
+
+    "  " <>
+      (pieces
+       |> Enum.reject(&is_nil/1)
+       |> Enum.join(" | "))
+  end
+
+  defp optional(_name, nil), do: nil
+  defp optional(name, value), do: "#{name}=#{inspect(value)}"
+
+  defp format_age(nil), do: "?"
+  defp format_age(seconds) when seconds < 60, do: "#{seconds}s"
+
+  defp format_age(seconds) when seconds < 3600,
+    do: "#{div(seconds, 60)}m"
+
+  defp format_age(seconds) when seconds < 86_400,
+    do: "#{div(seconds, 3600)}h #{div(rem(seconds, 3600), 60)}m"
+
+  defp format_age(seconds),
+    do: "#{div(seconds, 86_400)}d #{div(rem(seconds, 86_400), 3600)}h"
+end
