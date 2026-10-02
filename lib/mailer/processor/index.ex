@@ -25,7 +25,6 @@ defmodule Rivet.Mailer.Processor do
 
   use GenServer
   use Rivet.Mailer
-  require Logger
   alias Rivet.Mailer.Dispatch.Lib, as: DispatchLib
 
   def enabled(bool), do: Application.put_env(:rivet_mailer, :enabled, bool)

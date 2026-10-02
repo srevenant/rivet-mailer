@@ -1,8 +1,5 @@
 defmodule Rivet.Mailer.Utils.Code do
-  require Logger
   use Rivet.Mailer
-  alias Core.Db.Ident.UserCode
-  import Rivet.Mailer.Utils.Constants, only: [enrich_user!: 3, enrich_links!: 2]
 
   def enrich_with_code(user_id, type, meta \\ %{}) do
     with {:ok, code} <- UserCode.Lib.reset_generate(user_id, type, meta) do
@@ -26,8 +23,8 @@ defmodule Rivet.Mailer.Utils.Code do
                  code: code.code,
                  nfactors: length(user.factors)
                })
-               |> enrich_user!(:recip, user)
-               |> enrich_links!(user)
+               |> Rivet.Mailer.enrich!(:recip, user)
+               |> Rivet.Mailer.enrich!(user)
          }}
       end
     end

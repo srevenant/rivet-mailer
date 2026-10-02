@@ -1,9 +1,9 @@
 defmodule Rivet.Mailer.Target do
   use TypedEctoSchema
-  import Ecto.Changeset
   use Rivet.Ecto.Model
-  alias Core.Db.Ident.{User, Email}
-  use Core.Context
+  use Rivet.Mailer.Db
+  use Rivet.Mailer.Template
+  use Rivet.Mailer
 
   typed_schema "mailer_targets" do
     # NOTE: this is for Dispatches, so while we could bring in email_id through

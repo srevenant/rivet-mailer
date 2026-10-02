@@ -7,8 +7,8 @@ defmodule Rivet.Mailer.CriticalFail do
   """
 
   use Rivet.Mailer.Template
+  use Rivet.Mailer
   import Rivet.Utils.UniformLogFormat, only: [format_msg: 2]
-  require Logger
 
   @handler Application.compile_env(:rivet_mailer, :critical_fail) || false
 

@@ -1,5 +1,5 @@
-defmodule Test.Rivet.Mailer.Processor.BatchTest do
-  use Test.Support.Mailer.Case.Mailer
+defmodule Test.Mailer.Processor.BatchTest do
+  use Test.Support.Mailer.Case
   import ExUnit.CaptureLog
 
   setup do

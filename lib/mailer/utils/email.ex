@@ -1,11 +1,9 @@
 defmodule Rivet.Mailer.Utils.Email do
-  require Logger
   use Rivet.Mailer
-  import Core.Guards
 
   ##############################################################################
   @doc """
-  iex> %{user} = e = insert(:email, verified: true)
+  iex> %{user} = e = insert(:ident_email, verified: true)
   iex> e = Ecto.reset_fields(e, [:user])
   iex> expand_emails(%{user | emails: [e]})
   [e]
@@ -19,10 +17,10 @@ defmodule Rivet.Mailer.Utils.Email do
   @doc """
   future: opts can include verfied: true (or some way to only send to verified addresses)
 
-  iex> %{user, id: e_id} = insert(:email, verified: true)
-  iex> {:ok, %Core.Db.Ident.Email{id: ^e_id}} = get_best_email(user)
+  iex> %{user, id: e_id} = insert(:ident_email, verified: true)
+  iex> {:ok, %Rivet.Ident.Email{id: ^e_id}} = get_best_email(user)
 
-  iex> get_best_email(insert(:user))
+  iex> get_best_email(insert(:ident_user))
   {:error, "Cannot find email for user"}
   """
 

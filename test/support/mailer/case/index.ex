@@ -1,13 +1,12 @@
 defmodule Test.Support.Mailer.Case do
   use ExUnit.CaseTemplate
-  # import Test.Support.Mailer
 
   using(opts) do
     quote location: :keep, bind_quoted: [opts: opts] do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Core.Guards
+      import Rivet.Guards
       import Test.Support.Mailer.Factories
       import ExUnit.CaptureLog
       use Rivet.Mailer
@@ -52,25 +51,19 @@ defmodule Test.Support.Mailer.Case do
       # and it is in the subprocess
       def expect_bypass(a, b, c)
 
-      def expect_bypass(mod, [[_, target], assigns], expected) when not_empty_str(target),
-        do: expect_bypass_(mod, [target, assigns], expected)
+      # def expect_bypass(mod, [[_, target], assigns], expected) when not_empty_str(target),
+      #   do: expect_bypass_(mod, [target, assigns], expected)
 
-      def expect_bypass(a, b, c), do: expect_bypass_(a, b, c)
+      # def expect_bypass(a, b, c), do: expect_bypass_(a, b, c)
 
       ########
-      def expect_bypass_(mod, [target, assigns], expected)
-          when not_empty_str(target) do
-        send_bypass = fn ->
-          mod.template_send(%Core.Db.Ident.Email{address: target}, assigns)
-        end
-
-        expectx(mod, send_bypass, expected)
-      end
+      def expect_bypass(mod, [dispatch, assigns], expected),
+        do: expectx(mod, fn -> mod.dispatch(dispatch, assigns) end, expected)
 
       @div "--------------------"
       defp run_enrich_error(func, template) do
         with {:error, {:eval, msg, x}, _} <- func.(),
-             {:ok, t} <- Rivet.Email.Template.one(name: "#{template}") do
+             {:ok, t} <- Rivet.Mailer.Template.one(name: "#{template}") do
           IO.puts([@div, " RAW TEMPLATE #{template}\n\n", t.data, "\n"])
 
           String.split(t.data, ~r/\n===(.*)$/m, include_captures: true)
@@ -113,17 +106,42 @@ defmodule Test.Support.Mailer.Case do
           assert {:ok, %Dispatch{}} = run_enrich_error(func, template)
         end)
         |> check_expected(expected)
+
         # stops async errors happening after test exits
-        |> tap(fn _ -> Rivet.Mailer.Processor.test_clear_pending() end)
+        # |> tap(fn _ -> Rivet.Mailer.Processor.test_clear_pending() end)
       end
     end
   end
 
-  setup tags do
-    setup_core_repo(tags, [], fn ->
-      Rivet.Mailer.Processor.test_clear_pending()
+  use Rivet.Mailer
+  alias Ecto.Adapters.SQL.Sandbox
+
+  @accessors [Rivet.Mailer.Processor]
+
+  setup do
+    owner = Sandbox.start_owner!(Repo, shared: false)
+
+    sandbox_allow_processes(owner, @accessors)
+
+    ExUnit.Callbacks.on_exit(fn ->
+      # Rivet.Mailer.Processor.test_clear_pending()
       Rivet.Mailer.enabled(false)
       Application.put_env(:rivet_mailer, :mode, :test)
+      Sandbox.stop_owner(owner)
     end)
+
+    {:ok, sandbox_owner: owner}
   end
+
+  def sandbox_allow(owner, mod) do
+    case Process.whereis(mod) do
+      nil ->
+        :ok
+
+      pid ->
+        Sandbox.allow(Repo, owner, pid) in [:ok, {:already, :allowed}, {:already, :owner}]
+    end
+  end
+
+  def sandbox_allow_processes(owner, list), do: Enum.each(list, &sandbox_allow(owner, &1))
 end

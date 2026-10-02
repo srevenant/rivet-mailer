@@ -1,6 +1,5 @@
-defmodule Test.Rivet.Mailer.DispatchTest do
+defmodule Test.Mailer.Dispatch.ModelTest do
   use Test.Support.Mailer.Case, async: true
-  use Core.ContextClient
   alias Rivet.Mailer.Dispatch
 
   doctest Dispatch.Lib, import: true

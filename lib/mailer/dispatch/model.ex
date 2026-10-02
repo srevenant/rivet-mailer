@@ -1,11 +1,9 @@
 defmodule Rivet.Mailer.Dispatch do
   use TypedEctoSchema
-  import Ecto.Changeset
-  use Core.ContextClient
   use Rivet.Ecto.Model
-  import EctoEnum
-  alias Core.Db.Ident.Email
-  alias Rivet.Mailer
+  use Rivet.Mailer.Db
+  use Rivet.Mailer
+  import DefEnum
 
   # NOTE: aborted==pre-delivery; failed==after delivery
   defenum(Status, pending: 0, dispatched: 1, aborted: 2, delivered: 3, skipped: 4, failed: 100)

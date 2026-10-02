@@ -5,21 +5,13 @@ defmodule Rivet.Mailer.Template do
               | {:error, term()}
 
   defmacro __using__(_) do
-    quote do
-      use Rivet.Mailer
+    quote location: :keep do
+      # use Rivet.Mailer
+      # import Rivet.Guards
+      import Rivet.Mailer.Utils.Format
+      alias Rivet.Mailer.{Utils, Template, Dispatch}
 
-      import Core.Guards
-      import Rivet.Mailer.Utils.{Constants, Format}
-
-      # redefining from Rivet.Mailer so they'll export properly
-      alias Rivet.Mailer
-      alias Rivet.Mailer.{Processor, Template, Dispatch, Target, Origin}
-      alias Rivet.Mailer.CriticalFail
-      alias Core.Db.Ident
-      alias Core.Db.Ident.{User, Email}
-      alias Core.Db
-
-      @behaviour Rivet.Mailer.Template
+      @behaviour Template
 
       def mailer_queue(target, assigns \\ %{}, opts \\ []),
         do: Template.Queue.mailer_queue_(__MODULE__, target, assigns, opts)
@@ -41,6 +33,8 @@ defmodule Rivet.Mailer.Template do
 
   use TypedEctoSchema
   use Rivet.Ecto.Model
+  # use Rivet.Mailer.Db
+  # use Rivet.Mailer
 
   typed_schema "mailer_templates" do
     field(:name, :string)

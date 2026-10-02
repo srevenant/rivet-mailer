@@ -1,0 +1,507 @@
+---
+type: Rivet.Data
+version: 2.1
+env: test
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    <%= @admin.name %> has invited you to join "<%= @invite.to %>" at <%= @site.name %>
+    === body
+    <p><%= @admin.name %> has invited you to join "<%= @invite.to %>" as <%= @access %><%= @roles %>.
+
+    <p>You can accept this invitation by visiting <a href="<%= @invite.link %>"><%= @site.name %> - <%= @invite.to %> - ACCEPT</a>, or copying the link:
+
+    <p><blockquote>
+    <%= @invite.link %>
+    </blockquote>
+
+    <p><%= @site.footer %>
+  id: c033d498-dccb-4bcb-9510-9b207c2dd4ba
+  name: Elixir.Core.Mailer.Template.Invite.RequestJoin
+
+---
+type: Rivet.Mailer.Template
+values:
+  id: 86de3f08-33bc-4cd8-9745-cf2aa2e211eb
+  name: Elixir.Core.Mailer.Template.ContactUs.ToRequestor
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    <%= @site.name %> Message Received
+    === body
+    <style type="text/css">
+    th { text-align: right }
+    </style>
+    We've received your message (shown below) Thank you!
+    <p><p>
+    <table><tbody>
+    <%= for [k, v] <- @fields do %>
+    <tr><th><b><%= Rivet.Utils.English.titleize("#{k}") %>:</b></th><td><%= v %></td></tr>
+    <% end %>
+    </tbody></table>
+    <p>
+    <%= @site.footer %>
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    <%= @site.name %> Contact Us Form Received
+    === body
+    <style type="text/css">
+    th { text-align: right }
+    </style>
+    Sales Message Submitted
+    <p>
+    <i><b style="color: #f44">NOTE: This is sent by Libreon's Form System, it is not sent directly by the user</b></i>
+    <p>This can cause some confusion with systems detecting content as unsolicited email. Be cautious flagging it as a problem as this will actually impact our internal systems automation.
+    <p>
+    <br>
+    <table><tbody>
+    <%= for [k, v] <- @fields do %>
+    <tr><th style="padding: 0.25em"><b><%= Rivet.Utils.Title.titleize("#{k}") %>:</b></th><td style="padding: 0.25em"><%= v %></td></tr>
+    <% end %>
+    </tbody></table>
+  id: 7da20d21-c4ee-40b7-a64a-d1afe8d88bd3
+  name: Elixir.Core.Mailer.Template.ContactUs.ToSales
+
+# ---
+# type: Rivet.Mailer.Template
+# values:
+#   data: '{"addrs":{"from":["Libreon Team","no-reply@libreon.net"],"verify":["Libreon Team","verified@libreon.net"],"support":["Libreon Support","libreon-support@libreon.net"],"sales":["Libreon Support","libreon-support@libreon.net"],"errors":["Brandon","brandon@cold.org"]},"site":{"link_home":"https://libreon.net","link_app":"https://libreon.net","link_api":"https://api.libreon.net","name":"Libreon","footer":"<p>If you have any questions, please visit the <a href=\"https://libreon.net/help/\">Libreon Help Docs</a>.<p>- Libreon Support Team</p>"}}'
+#   id: abeeadeb-dbef-4fad-8834-3d80c0295a0c
+#   name: //CONFIG/libreon.net
+#
+# ---
+# type: Rivet.Mailer.Template
+# values:
+#   data: '{"addrs":{"from":["Libreon Team","no-reply@libreon.net"],"verify":["Libreon Team","verified@libreon.net"],"support":["Libreon Support","libreon-support@libreon.net"],"sales":["Libreon Support","libreon-support@libreon.net"],"errors":["Brandon","brandon@cold.org"]},"site":{"link_home":"https://libreon.net","link_app":"https://libreon.net","link_api":"https://api.libreon.net","name":"Libreon","footer":"<p>If you have any questions, please visit the <a href=\"https://libreon.net/help/\">Libreon Help Docs</a>.<p>- Libreon Support Team</p>"}}'
+#   id: 464b739c-2ec1-4c9d-872f-6ef47f1b57e1
+#   name: //CONFIG/ridersofthestars.com
+#
+# ---
+# type: Rivet.Mailer.Template
+# values:
+#   data: '{"addrs":{"from":["Libreon Team","no-reply@libreon.net"],"verify":["Libreon Team","verified@libreon.net"],"support":["Libreon Support","libreon-support@libreon.net"],"sales":["Libreon Support","libreon-support@libreon.net"],"errors":["Brandon","brandon@cold.org"]},"site":{"link_home":"https://libreon.net","link_app":"https://libreon.net","link_api":"https://api.libreon.net","name":"Libreon","footer":"<p>If you have any questions, please visit the <a href=\"https://libreon.net/help/\">Libreon Help Docs</a>.<p>- Libreon Support Team</p>"}}'
+#   id: a228dffd-4ce7-46c6-ab40-480f44d76279
+#   name: //CONFIG/site
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    Your <%= @invite.type %> to join <%= @invite.to %> at <%= @site.name %> is <%= @invite.what %>
+    === body
+    <p>Your <%= @invite.type %> to join <a href="<%= @invite.to_link %>"><%= @invite.to %> at <%= @site.name %></a> is <%= @invite.what %>.
+
+    <p><%= @site.footer %>
+  id: 998e5b82-4825-43a0-9d22-4c3bb8dd90dd
+  name: Elixir.Core.Mailer.Template.Invite.AcceptApproved
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    <%= @site.name %> Access Request
+    === body
+    <p>The following request has been made to "<%= @invite.to %>" at <%= @site.name %>, which you manage:
+
+    <p><blockquote>
+    <%= @manage %>
+    <div class="border: solid 1px gray; padding: 0.5rem;"><%= @note %></div>
+    </blockquote>
+
+    <p>You can go to <a href="<%= @invite.manage_link %>"><%= @site.name %> - <%= @invite.to %> - access management</a> to approve or deny this request.
+
+    <p><%= @site.footer %>
+  id: 599bfab5-40d3-44af-9446-d7e002211166
+  name: Elixir.Core.Mailer.Template.Invite.MemberAsk
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    [<%= @site.name %>] Answer Submitted (<%= @project.title %>) <%= @answer.input.label %>
+    === body
+    <h1>Answer Submitted</h1>
+    <style>
+    .thl { text-align: right; font-weight: bold }
+    </style>
+    <table><tbody>
+    <tr><td class="thl">Title:</td><td><a href="<%= @links.project %>"><%= @project.title %></a></td></tr>
+    <tr><td class="thl">Mentor Answer:</td><td><a href="<%= @links.mentor_answer %>"><%= @answer.input.label %></td></tr>
+    <tr><td class="thl">Journey Answer:</td><td><a href="<%= @links.journey_answer %>"><%= @answer.input.label %></td></tr>
+    <tr><td class="thl">User:</td><td><a href="<%= @links.actor %>"><%= @actor.name %> (<%= @actor.handle %>)</a></td></tr>
+    </tbody></table>
+  id: b79d4d28-2dc4-40b6-a248-f8771c5561c2
+  name: Elixir.Core.Mailer.Template.Learn.AnswerReady
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    [<%= @site.name %>] You’ve received new feedback on: <%= @project.title %>
+    === body
+    You have received feedback in your journey submission on: <a href="<%= @links.journey %>"><%= @project.title %></a>.
+    <p>
+
+    You can review this feedback on your title's journey page: <a href="<%= @links.journey %>"><%= @links.journey %></a>.
+    <p>
+
+    Or, if you prefer not to click links in email, go to Manage → Journeys in Libreon and pick up where you left off.
+    <p>
+
+    Take a look and keep your momentum going — every round of feedback is a step closer to the next milestone.
+    <p>
+
+    Thanks for being part of the Libreon community!
+
+    <%= @site.footer %>
+  id: 29cddd7b-ed76-48d9-aa70-c274fb39bd60
+  name: Elixir.Core.Mailer.Template.Learn.MentorFeedback
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    From the world of Atom Bomb Baby: God's Gonna Cut You Down
+    === body
+    A new Riders of the Stars novel, now available for pre-order.
+    <p>
+    I’m excited to share that my next book in the series, <b>God's Gonna Cut You Down</b>, is now available for pre-order where books are sold.
+    <p>
+    <blockquote>
+    “Gripping dystopian tale [...] exploring survival, humanity, and self-acceptance.” — <i>Booklife by Publishers Weekly</i>
+    <p>
+    “A compelling SF survival saga.” — <i>Kirkus Reviews</i>
+    </blockquote>
+    <p>
+    I know many of you have been waiting for the next volume after <i>Atom Bomb Baby</i>. <i>God's Gonna Cut You Down</i> isn’t that direct continuation—it’s a story that runs alongside it, beginning even before ABB. While Ashe, Jade, and their friends don’t appear here, this book lays the groundwork for what’s coming next in <i>Catch a Falling Star</i>, planned for early to mid next year.
+    <p>
+    I’ll admit, <i>God's Gonna Cut You Down</i> came about by accident. While I was developing <i>Catch a Falling Star</i>, the backstory for a new character took on a life of its own—and became a full novel.
+    <p>
+    <a href="https://ridersofthestars.com/#ggcyd">
+    Read more or pre-order now from the Riders of the Stars website.
+    </a>
+    <p>
+    Thank you for your support, it means a lot.
+    <p>
+    <i>— Brandon Gillespie</i>
+
+    <p>If you have any questions, please visit the <a href="https://revenant.studio/social/">Libreon and Revenant Studio chat server (discord)</a>.
+
+    <p style="font-size: smaller">
+    (You’re receiving this email because you expressed interest in receiving updates on new releases. You can update your email preferences by visiting: <a href="<%= @links.subs %>">Manage Subscriptions.</a>)
+    </p>
+  id: d6814803-6f28-4f6c-a0b6-f64a9625bc89
+  name: Elixir.Core.Mailer.Template.Revenant.NewRelease
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    Thanks for stopping by at <%= @event %>! Let’s stay connected
+    === body
+    Thank you so much for stopping by my booth at <%= @event %>! It was wonderful meeting you and hearing your excitement about the <i>Riders of the Stars</i> series and the creative community we’re building together with Libreon.
+
+    <p>You’re receiving this email because you expressed interest in updates from me. Welcome aboard, and sorry for the delay in getting this processed!
+
+    <p>You can review or update your email preferences anytime by visiting: <a href="<%= @links.subs %>">Manage Subscriptions</a>.
+
+    <h2>Your current email preferences:</h2>
+
+    <ul>
+    <%= for {pref, value} <- @prefs do %>
+      <li><b><%= pref %>:</b> <%= value %>
+    <% end %>
+    </ul>
+
+    If you’d like to connect or have any questions, come hang out with us on the <a href="https://revenant.studio/social/">Libreon Chat Server (discord)</a>.
+
+    <p>- Brandon Gillespie
+  id: 1cab647e-5115-4ee3-a6a2-eb446f71a465
+  name: Elixir.Core.Mailer.Template.Revenant.Signup
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    Codex System Error
+    === body
+    <p>Something bad happened!
+
+    <p><pre><%= @log %></pre>
+  id: f4a6ed2e-3528-4e97-9590-3df5314d72ff
+  name: Elixir.Rivet.Mailer.CriticalFail
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    <%= @site.name %> User Account Delete
+    === body
+    <% link = "#{@links.delete}/#{@code}" %>
+
+    <p>PLEASE NOTE: Libreon, Revenant Creative Studio, and Roguetrader all share the same backend (Codex), as such your account is the same across all of these sites. Deleting from one will delete it from all!
+
+    <p>We recently received a request to delete your account '<%= @recip.handle %>'. This is PERMANENT, there is no going back, so be certain.
+
+    <p>If you initiated this request, you can complete the process by clicking the link:
+
+    <p><a href="<%= link %>">Delete Account</a>
+
+    <p>This delete code will expire in <%= @expires %>.
+
+    <p>If you did not initiate this request, you can ignore this email and your account will not be deleted.
+
+    <p><b>PLEASE NOTE:</b> Libreon, Revenant Creative Studio, and Roguetrader all share the same backend (Libreon), as such your account is the same across all of these sites.
+
+    <p><b><i>Deleting from one will delete it from all!</i></b>
+
+    <p><%= @site.footer %>
+  id: 2b35689c-9b28-4397-be4e-dafa1118f18a
+  name: Elixir.Core.Mailer.Template.User.AccountDelete
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    <%= @site.name %> User Change Failed
+    === body
+    <p>We recently received a request to <%= @action %>, but it was unsuccessful.
+
+    <p>If you did not request this change, you can ignore this email and nothing will change.
+
+    <p><b>PLEASE NOTE:</b> Libreon, Revenant Creative Studio, and Roguetrader all share the same backend (Libreon), as such your account is the same across all of these sites. Changes to one changes it on all.
+
+    <p><%= @site.footer %>
+  id: 9628698f-e2be-4995-8cfe-fad2d5965322
+  name: Elixir.Core.Mailer.Template.User.FailedChange
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    <%= @site.name %> Message Received
+    === body
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body>
+        <div style="line-height:1.5">
+          <p>You have received a <a href="<%= @links.contact %>"><%= @site.name %> message:</a></p>
+
+          <table><tbody>
+          <tr><th>From:</th><td><%= @author.name %> (<%= @author.handle %>)</td></tr>
+          <tr><th>Message:</th><td><%= @message %></td></tr>
+          </tbody></table>
+
+          <p>Note: You can disable automatic LibMail updates in your Preferences->Contact settings</p>
+          <p><%= @site.footer %></p>
+        </div>
+      </body>
+    </html>
+  id: 8917541c-8332-42c1-99e9-82ddc2c23ebf
+  name: Elixir.Core.Mailer.Template.User.LibreonMail
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    <%= @site.name %> Password Changed
+    === body
+    <p>The account at <%= @site.name %> associated with this email had its password changed.
+
+    <p><b>PLEASE NOTE:</b> Libreon, Revenant Creative Studio, and Roguetrader all share the same backend (Libreon), as such your account is the same across all of these sites. Changes to one changes it on all.
+
+
+    <p><%= @site.footer %>
+  id: 20fb335d-2e70-4203-b7de-3c28fd806a5c
+  name: Elixir.Core.Mailer.Template.User.PasswordChanged
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    <%= @site.name %> Password Reset
+    === body
+    <% link = "#{@links.pwreset}/#{@code}" %>
+
+    <p>We recently received a request to reset a password for your account at <%= @site.name %>. If you initiated this request, you can reset your password with this one-time-use code by clicking the Reset Password link:
+
+    <p><a href="<%= link %>">Reset Password</a>
+
+    <p>If you are unable to view or click the link in this message, copy the following URL and paste it in your browser:
+
+    <p><code><%= link %></code>
+
+    <p>This code will expire in <%= @expires %>.
+
+    <p>If you did not request this change, you can ignore this email and your password will not be changed.
+
+    <p><b>PLEASE NOTE:</b> Libreon, Revenant Creative Studio, and Roguetrader all share the same backend (Libreon), as such your account is the same across all of these sites. Changes to one changes it on all.
+
+
+    <p><%= @site.footer %>
+  id: aeb3ccca-857e-442f-ba27-577efdc4fabd
+  name: Elixir.Core.Mailer.Template.User.PasswordReset
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    <%= @site.name %> Email Verification
+    === body
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body>
+        <div style="line-height:1.5">
+          <p>We received a request to verify an email address at <b>Libreon.net</b>. This helps us finish setting up your account and enable all features. If this wasn’t you, you can safely ignore this message.</p>
+          <p><b>To verify your email address, simply reply to this email.</b></p>
+          <p>You don’t need to type or change anything — just send the reply as-is.</p>
+          <p>This code will expire in <%= @expires %>.
+          <blockquote>
+          <strong>Verification code:</strong>
+          <p><code>LCODE: <%= @code %></code></p>
+          </blockquote>
+          <p><%= @site.footer %></p>
+        </div>
+      </body>
+    </html>
+  id: a70bc19d-d41f-4c1d-937f-db4cf0b3945c
+  name: Elixir.Core.Mailer.Template.User.Verification
+
+---
+type: Rivet.Mailer.Template
+values:
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    <%= @site.name %> Email Verified
+    === body
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body>
+        <div style="line-height:1.5">
+          <p>Your email (and account) are now verified. You can use all the features of Libreon.</p>
+          <p><%= @site.footer %></p>
+        </div>
+      </body>
+    </html>
+  id: 33532b51-55ea-40e3-939a-be07b6d0505a
+  name: Elixir.Core.Mailer.Template.User.Verified
+
+
+---
+type: Rivet.Mailer.Template
+values:
+  id: EF5B5CD1-FC35-4A6A-AA27-ADDAAF361B7E
+  name: Elixir.Core.Mailer.Template.Revenant.Subscribe
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    Subscribed to new releases
+    === body
+    Hello,
+
+    We received a request to subscribe to new release emails. If this is not
+    desired, you can reverse your subscription by visiting: <a href="<%= @links.subs %>">Manage Subscriptions.</a>)
+
+    <p><%= @site.footer %>

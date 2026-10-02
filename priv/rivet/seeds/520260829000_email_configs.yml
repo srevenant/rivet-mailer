@@ -1,0 +1,93 @@
+---
+type: Rivet.Data
+version: 2.1
+
+---
+type: Rivet.Mailer.Config
+values:
+  id: BF2E8198-7921-4558-8158-5A67D3BCCEAF
+  site: default
+  group: "addrs"
+  key: "from"
+  value: [ "Libreon Team", "no-reply@libreon.net" ]
+
+---
+type: Rivet.Mailer.Config
+values:
+  id: 6F1C855B-2791-4BE8-A199-CCE3CC8A7E99
+  site: default
+  group: "addrs"
+  key: "verify"
+  value: [ "Libreon Team", "verified@libreon.net" ]
+
+---
+type: Rivet.Mailer.Config
+values:
+  id: 76873C1C-5678-4861-B50A-1E86ED6A7C03
+  site: default
+  group: addrs
+  key: support
+  value: ["Libreon Support", "libreon-support@libreon.net"]
+
+---
+type: Rivet.Mailer.Config
+values:
+  id: 22ADABF1-C54A-4C81-9890-0DBCFC72214F
+  site: default
+  group: addrs
+  key: sales
+  value: ["Libreon Support", "libreon-support@libreon.net" ]
+
+---
+type: Rivet.Mailer.Config
+values:
+  id: 13288734-427C-4E7D-ACFB-D2C789407F80
+  site: default
+  group: addrs
+  key: errors
+  value: ["Libreon Errors", "brandon@libreon.net" ]
+
+---
+type: Rivet.Mailer.Config
+values:
+  id: F2C05AEA-7C0C-411B-82DE-4DD7013538B5
+  site: default
+  group: site
+  key: name
+  value: "Libreon"
+
+---
+type: Rivet.Mailer.Config
+values:
+  id: 0644270D-98EC-440D-8157-DA08C2051FDA
+  site: default
+  group: site
+  key: link_back
+  value: "https://api.libreon.net"
+
+---
+type: Rivet.Mailer.Config
+values:
+  id: 51363AF3-A439-469E-97F6-F136AE992978
+  site: default
+  group: site
+  key: link_front
+  value: "https://libreon.net"
+
+---
+type: Rivet.Mailer.Config
+values:
+  id: E1EA5C94-F281-48B7-8EA7-1FDD959EDA34
+  site: default
+  group: site
+  key: html_support
+  value: "<a href=\"https://libreon.net/support/\">Libreon Support Team</a>"
+
+---
+type: Rivet.Mailer.Config
+values:
+  id: AFC6118E-3B24-4351-B445-8FE6CDF15032
+  site: default
+  group: site
+  key: footer
+  value: "<p>Sincerely, Libreon<p>"

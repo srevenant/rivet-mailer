@@ -1,11 +1,9 @@
 defmodule Rivet.Mailer.Dispatch.Log do
   use TypedEctoSchema
   use Rivet.Ecto.Model
-  import Core.ContextClient
-  alias Core.Db.Ident.Email
-  alias Rivet.Mailer
+  use Rivet.Mailer
   import DefEnum
-  import Rivet.Mailer.CriticalFail, only: [report_if_error: 3]
+  import CriticalFail, only: [report_if_error: 3]
 
   defenum(Type,
     pending: 0,

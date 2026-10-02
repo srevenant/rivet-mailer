@@ -1,8 +1,5 @@
 defmodule Rivet.Mailer.Template.Queue do
-  alias Rivet.Mailer.{Dispatch, Utils}
-  alias Core.Db.Ident
-  alias Ident.{User, Email}
-  require Logger
+  use Rivet.Mailer
 
   def mailer_queue_(t, %Email{} = e, assn, opts) do
     with :ok <- valid_target(e, opts), do: Dispatch.queue(e, t, assn)
@@ -38,7 +35,7 @@ defmodule Rivet.Mailer.Template.Queue do
   def mailer_queue_all_(t, %Email{} = e, a), do: mailer_queue_all_(t, [e], a)
 
   def mailer_queue_all_(t, targets, assns),
-    do: Core.Repo.transact(fn -> mailer_queue_all_(t, targets, assns, []) end)
+    do: Repo.transact(fn -> mailer_queue_all_(t, targets, assns, []) end)
 
   ####
   def mailer_queue_all_(t, [%User{} = u | rest], assigns, out) do

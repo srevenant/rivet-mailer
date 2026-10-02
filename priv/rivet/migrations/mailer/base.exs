@@ -1,8 +1,9 @@
 defmodule Rivet.Mailer.Migrations.Mailer.Base do
   use Ecto.Migration
-  use Core.ContextClient
 
   def change do
+    execute("CREATE EXTENSION IF NOT EXISTS citext")
+
     ############################################################################
     # a unifying table for targets
     create table(:mailer_targets, primary_key: false) do

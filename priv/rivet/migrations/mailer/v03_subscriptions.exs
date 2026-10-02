@@ -1,6 +1,5 @@
 defmodule Rivet.Mailer.Migrations.Mailer.V03Subscriptions do
   use Ecto.Migration
-  use Core.ContextClient
 
   def change do
     ############################################################################
@@ -9,7 +8,7 @@ defmodule Rivet.Mailer.Migrations.Mailer.V03Subscriptions do
       add(:id, :uuid, primary_key: true)
       add(:user_id, references(:users, on_delete: :delete_all, type: :uuid), null: true)
       # add(:project_id, references(:projects, on_delete: :delete_all, type: :uuid), null: true)
-      add(:org_id, references(:orgs, on_delete: :delete_all, type: :uuid), null: true)
+      # add(:org_id, references(:orgs, on_delete: :delete_all, type: :uuid), null: true)
       # add(:meet_id, references(:meets, on_delete: :delete_all, type: :uuid), null: true)
       # add(:discuss_id, references(:discuss, on_delete: :delete_all, type: :uuid), null: true)
 
@@ -17,14 +16,14 @@ defmodule Rivet.Mailer.Migrations.Mailer.V03Subscriptions do
     end
 
     create(unique_index(:mailer_origins, [:user_id]))
-    create(unique_index(:mailer_origins, [:org_id]))
-
-    # Exactly one origin
-    create(
-      constraint(:mailer_origins, :mailer_origins_one_origin,
-        check: "num_nonnulls(user_id, org_id) = 1"
-      )
-    )
+    # create(unique_index(:mailer_origins, [:org_id]))
+    #
+    # # Exactly one origin
+    # create(
+    #   constraint(:mailer_origins, :mailer_origins_one_origin,
+    #     check: "num_nonnulls(user_id, org_id) = 1"
+    #   )
+    # )
 
     ############################################################################
     create table(:mailer_subs, primary_key: false) do

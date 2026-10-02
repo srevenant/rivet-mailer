@@ -1,6 +1,5 @@
 defmodule Rivet.Mailer.Processor.Batch do
   use Rivet.Mailer
-  require Logger
   alias Rivet.Mailer.Dispatch.Lib, as: DispatchLib
 
   def process(batch_size, pending) do

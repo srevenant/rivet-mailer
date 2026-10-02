@@ -2,24 +2,33 @@ defmodule Rivet.Mailer do
   ################################################################################
   # Context
   defmacro __using__(_) do
+    user_model = Application.compile_env!(__CALLER__, :rivet, :user_model)
+    user_code_model = Application.compile_env!(__CALLER__, :rivet, :user_code_model)
+    email_model = Application.compile_env!(__CALLER__, :rivet, :email_model)
+    org_model = Application.compile_env!(__CALLER__, :rivet, :org_model)
+    handle_model = Application.compile_env!(__CALLER__, :rivet, :handle_model)
+    repo = Application.compile_env!(__CALLER__, :rivet, :repo)
+
     quote location: :keep do
+      alias unquote(user_model), as: User
+      alias unquote(user_code_model), as: UserCode
+      alias unquote(email_model), as: Email
+      alias unquote(org_model), as: Org
+      alias unquote(handle_model), as: Handle
+      alias unquote(repo), as: Repo
+
       @batch_interval_pending Application.compile_env!(:rivet_mailer, :batch_interval_pending)
       @batch_interval_none Application.compile_env!(:rivet_mailer, :batch_interval_none)
       @send_interval Application.compile_env!(:rivet_mailer, :send_interval)
       @send_timeout Application.compile_env!(:rivet_mailer, :send_timeout)
-      @user_model Application.compile_env!(:rivet_mailer, :user_model)
-      @email_model Application.compile_env!(:rivet_mailer, :email_model)
 
       @worker_supervisor :mailer_worker_supervisor
 
+      require Logger
+      import Rivet.Guards
       alias Rivet.Mailer
-      alias Rivet.Mailer.{Processor, Dispatch, Target}
+      alias Rivet.Mailer.{Processor, Dispatch, Target, Utils}
       alias Rivet.Mailer.CriticalFail
-      # temp
-      alias Core.Db.Ident.{User, Email}
-      alias Core.Db
-      # alias @user_model
-      # alias @email_model
     end
   end
 
@@ -29,19 +38,10 @@ defmodule Rivet.Mailer do
   """
   def getcfg(key), do: Application.get_env(:rivet_mailer, key)
 
+  @enricher Application.compile_env!(:rivet_mailer, :enricher)
+  def enrich!(a, k, t), do: @enricher.enrich!(a, k, t)
+  def enrich!(a, t), do: @enricher.enrich!(a, t)
+
   def enabled(bool) when is_boolean(bool),
     do: Application.put_env(:rivet_mailer, :enabled, bool)
-
-  #
-  # ################################################################################
-  # alias Core.Db
-  #
-  # use Mailer.Dispatcher,
-  #   otp_app: :core,
-  #   from_key: [:addrs, :from],
-  #   user_model: Db.Ident.User,
-  #   email_model: Db.Ident.Email,
-  #   allow_recips: :email,
-  #   backend: Rivet.Mailer.Rivet.Backend,
-  #   configurator: Rivet.Mailer.Rivet.Configurator
 end

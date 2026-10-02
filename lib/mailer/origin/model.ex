@@ -1,20 +1,21 @@
 defmodule Rivet.Mailer.Origin do
   use TypedEctoSchema
-  import Ecto.Changeset
   use Rivet.Ecto.Model
-  alias Core.Db
+  use Rivet.Mailer.Db
+  use Rivet.Mailer.Template
+  use Rivet.Mailer
 
   typed_schema "mailer_origins" do
-    belongs_to(:user, Db.Ident.User, type: :binary_id)
-    belongs_to(:org, Db.Org, type: :binary_id)
+    belongs_to(:user, User, type: :binary_id)
+    # belongs_to(:org, Org, type: :binary_id)
     timestamps()
   end
 
   use Rivet.Ecto.Collection,
     not_found: :atom,
-    create: [:user_id, :org_id, :id]
+    create: [:user_id, :id]
 
-  def upsert_origin(%Db.Ident.User{id: user_id}) do
+  def upsert_origin(%User{id: user_id}) do
     build(%{user_id})
     |> insert(
       on_conflict: [set: [user_id: user_id]],

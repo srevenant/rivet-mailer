@@ -14,8 +14,8 @@ defmodule Rivet.Mailer.Migrations.Mailer.V06Config do
 
     create(unique_index(:mailer_configs, [:site, :group, :key]))
 
-    flush()
-    execute("INSERT INTO mailer_configs SELECT * FROM email_configs;")
-    execute("UPDATE mailer_configs set site = 'default' where site = ''")
+    # flush()
+    # execute("INSERT INTO mailer_configs SELECT * FROM email_configs;")
+    # execute("UPDATE mailer_configs set site = 'default' where site = ''")
   end
 end

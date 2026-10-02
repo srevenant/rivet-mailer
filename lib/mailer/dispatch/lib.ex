@@ -1,7 +1,6 @@
 defmodule Rivet.Mailer.Dispatch.Lib do
-  use Core.Context
-  alias Rivet.Mailer
-  require Logger
+  use Rivet.Mailer.Db
+  use Rivet.Mailer
 
   # @doc """
   # iex> lock = Ecto.UUID.generate()
@@ -18,7 +17,7 @@ defmodule Rivet.Mailer.Dispatch.Lib do
   defp batch_base_query(),
     do:
       from(
-        s in Mailer.Dispatch,
+        s in Dispatch,
         where: s.status == :pending and is_nil(s.lock) and is_nil(s.sent_at)
       )
 
@@ -33,20 +32,20 @@ defmodule Rivet.Mailer.Dispatch.Lib do
   """
   def get_batch(batch_size) do
     lock = Ecto.UUID.generate()
+    now = DateTime.utc_now()
 
     picked =
       from(s in batch_base_query(),
         order_by: [asc: s.inserted_at, asc: s.id],
         limit: ^batch_size,
         lock: "FOR UPDATE SKIP LOCKED",
-        select: %{id: s.id}
+        select: s.id
       )
 
-    now = DateTime.utc_now()
-
-    from(s in Mailer.Dispatch,
-      join: p in subquery(picked),
-      on: p.id == s.id,
+    from(s in Dispatch,
+      # done as a subquery because PostgreSQL does not support ORDER BY or LIMIT
+      # directly on an UPDATE; this gives us both in one query.
+      where: s.id in subquery(picked),
       select: s.id
     )
     |> Repo.update_all(set: [lock: lock, locked_at: now, updated_at: now])
@@ -66,10 +65,10 @@ defmodule Rivet.Mailer.Dispatch.Lib do
   # def remove_old() do
   #   now = DateTime.utc_now() |> DateTime.shift(month: -3)
   #
-  #   from(n in Mailer.Dispatch, where: not is_nil(n.sent_at) and n.sent_at < ^now)
+  #   from(n in Dispatch, where: not is_nil(n.sent_at) and n.sent_at < ^now)
   #   |> Repo.delete_all()
   #
-  #   # from(n in Mailer.Dispatch, where: not not is_nil(n.sent_at) and n.updated_at < ^now)
+  #   # from(n in Dispatch, where: not not is_nil(n.sent_at) and n.updated_at < ^now)
   #   # |> Repo.aggregate(:count)
   # end
   #

@@ -1,5 +1,5 @@
-defmodule Test.Rivet.Mailer.Processor.SenderTest do
-  use Test.Support.Mailer.Case.Mailer
+defmodule Test.Mailer.Processor.SenderTest do
+  use Test.Support.Mailer.Case
   use Rivet.Mailer
   alias Processor.Sender
 

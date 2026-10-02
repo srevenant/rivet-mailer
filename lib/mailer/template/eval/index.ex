@@ -1,8 +1,6 @@
 defmodule Rivet.Mailer.Template.Eval do
-  alias Rivet.Mailer.{Dispatch, Target}
+  use Rivet.Mailer
   alias Rivet.Engram
-  require Logger
-  import Core.Guards
 
   def generate(%Dispatch{target: %Target{address}} = d) when not_empty_str(address) do
     case Rivet.Mailer.Template.one(name: to_string(d.template)) do

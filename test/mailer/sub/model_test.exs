@@ -1,6 +1,5 @@
-defmodule Test.Rivet.Mailer.SubTest do
+defmodule Test.Mailer.Sub.ModelTest do
   use Test.Support.Mailer.Case, async: true
-  use Core.ContextClient
   alias Rivet.Mailer.Sub
 
   test "model tests" do

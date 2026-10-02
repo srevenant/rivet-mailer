@@ -1,0 +1,63 @@
+---
+type: Rivet.Data
+version: 2.1
+
+---
+type: Rivet.Mailer.Template
+values:
+  id: 33532B51-55EA-40E3-939A-BE07B6D0505A
+  name: Elixir.Core.Mailer.Template.User.Verified
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    <%= @site.name %> Email Verified
+    === body
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body>
+        <div style="line-height:1.5">
+          <p>Your email (and account) are now verified. You can use all the features of Libreon.</p>
+          <p><%= @site.footer %></p>
+        </div>
+      </body>
+    </html>
+
+---
+type: Rivet.Mailer.Template
+values:
+  id: a70bc19d-d41f-4c1d-937f-db4cf0b3945c
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    <%= @site.name %> Email Verification
+    === body
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body>
+        <div style="line-height:1.5">
+          <p>We received a request to verify an email address at <b>Libreon.net</b>. This helps us finish setting up your account and enable all features. If this wasn’t you, you can safely ignore this message.</p>
+          <p><b>To verify your email address, simply reply to this email.</b></p>
+          <p>You don’t need to type or change anything — just send the reply as-is.</p>
+          <p>This code will expire in <%= @expires %>.
+          <blockquote>
+          <strong>Verification code:</strong>
+          <p><code>LCODE: <%= @code %></code></p>
+          </blockquote>
+          <p><%= @site.footer %></p>
+        </div>
+      </body>
+    </html>

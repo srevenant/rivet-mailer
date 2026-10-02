@@ -1,4 +1,5 @@
 defmodule Test.Support.Mailer.Mock.GoodTemplate do
+  use Rivet.Mailer
   import Ecto.Query
 
   def dispatch(%{assigns: %{error: "traceback"}}), do: raise("Traceback")
@@ -14,7 +15,7 @@ defmodule Test.Support.Mailer.Mock.GoodTemplate do
   def dispatch(%{id: id, lock: lock, assigns: %{error: "delete_siblings"}}) do
     # make a problem for our sibling
     from(d in Rivet.Mailer.Dispatch, where: d.lock == ^lock and d.id != ^id)
-    |> Core.Repo.delete_all()
+    |> Repo.delete_all()
 
     {:ok, "mock template sent"}
   end

@@ -1,4 +1,4 @@
-defmodule Test.Rivet.Mailer.Utils.HeaderParserTest do
+defmodule Test.Mailer.Utils.HeaderParserTest do
   use ExUnit.Case, async: true
 
   alias Rivet.Mailer.Utils.HeaderParser

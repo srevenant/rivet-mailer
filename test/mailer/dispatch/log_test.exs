@@ -1,6 +1,5 @@
-defmodule Test.Rivet.Mailer.Dispatch.LogTest do
+defmodule Test.Mailer.Dispatch.LogTest do
   use Test.Support.Mailer.Case, async: true
-  use Core.ContextClient
   use Rivet.Mailer
   alias Dispatch.Log
 

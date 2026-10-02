@@ -1,7 +1,5 @@
 defmodule Rivet.Mailer.Template.Send do
   use Rivet.Mailer
-  import Core.Guards
-  require Logger
 
   ##############################################################################
   def dispatch(%Dispatch{target: %Target{}} = d) do
@@ -86,7 +84,7 @@ defmodule Rivet.Mailer.Template.Send do
        end)
        |> Swoosh.Email.subject(d.subject)
        |> Swoosh.Email.html_body("<html><body>#{d.body}</body></html>")
-       |> Swoosh.Email.text_body(Rivet.Email.Template.html2text(d.body))}
+       |> Swoosh.Email.text_body(Utils.Format.html2text(d.body))}
     end
   end
 

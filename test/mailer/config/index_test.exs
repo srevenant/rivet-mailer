@@ -1,4 +1,4 @@
-defmodule Test.Rivet.Mailer.Config.IndexTest do
+defmodule Test.Mailer.Config.IndexTest do
   use Test.Support.Mailer.Case
   alias Rivet.Mailer.Config
 

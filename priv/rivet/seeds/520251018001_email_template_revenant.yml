@@ -1,0 +1,46 @@
+---
+type: Rivet.Data
+version: 2.1
+env:
+  - dev
+  - prod
+
+---
+type: Rivet.Mailer.Template
+values:
+  id: D6814803-6F28-4F6C-A0B6-F64A9625BC89
+  name: Elixir.Core.Mailer.Template.Revenant.NewRelease
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    From the world of Atom Bomb Baby: Gods Gonna Cut You Down
+    === body
+    A new Riders of the Stars novel, now available for pre-order.
+    <p>
+    I’m excited to share that my next book in the series, <b>Gods Gonna Cut You Down</b>, is now available for pre-order where books are sold.
+    <p>
+    <blockquote>
+    “Gripping dystopian tale [...] exploring survival, humanity, and self-acceptance.” — <i>Booklife by Publishers Weekly</i>
+    <p>
+    “A compelling SF survival saga.” — <i>Kirkus Reviews</i>
+    </blockquote>
+    <p>
+    I know many of you have been waiting for the next part of the story after <i>Atom Bomb Baby</i>. <i>Gods Gonna Cut You Down</i> isn’t that direct continuation—it’s a story that runs alongside it, beginning even before ABB. While Ashe, Jade, and their friends don’t appear here, this book lays the groundwork for what’s coming next in <i>Catch a Falling Star</i>, planned for early to mid next year.
+    <p>
+    I’ll admit, <i>Gods Gonna Cut You Down</i> came about by accident. While I was developing <i>Catch a Falling Star</i>, the backstory for a new character took on a life of its own—and became a full novel.
+    <p>
+    About the story:
+    <p>
+    Diego is convicted of a crime he’s not even sure he committed. Exiled to the monster-infested lower decks of Serenity Orbital, he’s forced to survive—and to keep his void-tainted powers from tearing him apart.
+    <p>
+    <a href="https://ridersofthestars.com/#ggcyd">
+    Read more or pre-order now from the Riders of the Stars website.
+    </a>
+    <p>
+    Thanks, as always, for your support — it means a lot.
+    <p>
+    <i>— Brandon Gillespie</i>
+    <p><%= @site.footer %>
