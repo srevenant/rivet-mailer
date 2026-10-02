@@ -27,5 +27,8 @@ defmodule Test.Mailer.Config.IndexTest do
     assert_raise RuntimeError, fn ->
       Config.Cache.conf!("spleen", "boop", "nosite")
     end
+
+    # coverage
+    assert "Libreon" = Config.Cache.getsite("name")
   end
 end

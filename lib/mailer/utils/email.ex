@@ -16,14 +16,7 @@ defmodule Rivet.Mailer.Utils.Email do
   ##############################################################################
   @doc """
   future: opts can include verfied: true (or some way to only send to verified addresses)
-
-  iex> %{user, id: e_id} = insert(:ident_email, verified: true)
-  iex> {:ok, %Rivet.Ident.Email{id: ^e_id}} = get_best_email(user)
-
-  iex> get_best_email(insert(:ident_user))
-  {:error, "Cannot find email for user"}
   """
-
   def get_best_email(%User{} = user) do
     with {:ok, %User{emails}} <- User.preload(user, [:emails]),
          do: get_best_email_(emails, user)

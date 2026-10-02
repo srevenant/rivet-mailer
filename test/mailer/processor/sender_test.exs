@@ -1,6 +1,7 @@
 defmodule Test.Mailer.Processor.SenderTest do
   use Test.Support.Mailer.Case
   use Rivet.Mailer
+  import ExUnit.CaptureLog
   alias Processor.Sender
 
   defp good_dispatch(assigns) do
@@ -14,7 +15,11 @@ defmodule Test.Mailer.Processor.SenderTest do
 
   test "Successful SES dispatch saves sender id" do
     d = good_dispatch(%{result: "ses"})
-    assert {:ok, _} = Sender.send(d)
+
+    assert capture_log(fn ->
+             assert {:ok, _} = Sender.send(d)
+           end) =~ ~r/email dispatched/
+
     assert %{sender_id: "ses:ses-test-id"} = is_dispatched(d.id)
   end
 
@@ -54,7 +59,9 @@ defmodule Test.Mailer.Processor.SenderTest do
     assert {:aborted, "uhoh: woops", [1]} =
              Sender.normalize_result({:error, %{code: "uhoh", message: "woops"}, [1]})
 
-    assert {:aborted, "Mailer DISABLED: unexpected result shape", response: :wat} =
-             Sender.normalize_result(:wat)
+    assert capture_log(fn ->
+             assert {:aborted, "Mailer DISABLED: unexpected result shape", response: :wat} =
+                      Sender.normalize_result(:wat)
+           end) =~ ~r/DISABLED due to unexpected result/
   end
 end
