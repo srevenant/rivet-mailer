@@ -36,11 +36,12 @@ config :rivet,
 # test: true
 # ecto_repos: [Rivet.Test.Repo]
 config :rivet_mailer,
-  otp_app: :core,
+  # for swoosh
+  otp_app: :rivet_mailer,
   ecto_repos: [Test.Support.Mailer.Repo],
   # test config things
   mode: :test,
-  enricher: Rivet.Mailer.Utils.Enricher,
+  enricher: Rivet.Mailer.Enricher,
   # yes this is also available in mailer_templates.critical_fail, but the
   # purposes are different so it needs to be duplicated here, for testing.
   critical_fail: Test.Support.Mailer.Mock.CriticalFail,

@@ -1,4 +1,4 @@
-defmodule Rivet.Mailer.Utils.Enricher do
+defmodule Rivet.Mailer.Enricher do
   @moduledoc """
   This is for runtime assigns enrichment when templates run, and can be
   overridden locally to customize it.

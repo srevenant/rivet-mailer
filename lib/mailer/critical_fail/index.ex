@@ -10,6 +10,7 @@ defmodule Rivet.Mailer.CriticalFail do
   use Rivet.Mailer
   import Rivet.Utils.UniformLogFormat, only: [format_msg: 2]
 
+  # gymnastics for test, only set this in test config
   @handler Application.compile_env(:rivet_mailer, :critical_fail) || false
 
   if @handler == false do
