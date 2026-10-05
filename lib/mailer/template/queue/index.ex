@@ -10,7 +10,7 @@ defmodule Rivet.Mailer.Template.Queue do
   end
 
   def mailer_queue_(t, other, assn, _opts) do
-    with {:ok, %@email_model{} = e} <- Tools.Email.direct_email_address(other),
+    with {:ok, %{__struct__: @email_model} = e} <- Tools.Email.direct_email_address(other),
          do: Dispatch.queue(e, t, assn)
   end
 

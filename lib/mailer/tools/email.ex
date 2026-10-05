@@ -18,18 +18,18 @@ defmodule Rivet.Mailer.Tools.Email do
   future: opts can include verfied: true (or some way to only send to verified addresses)
   """
   def get_best_email(%{__struct__: @user_model} = user) do
-    with {:ok, %@user_model{emails}} <- @user_model.preload(user, [:emails]),
+    with {:ok, %{emails, __struct__: @user_model}} <- @user_model.preload(user, [:emails]),
          do: get_best_email_(emails, user)
   end
 
   def get_best_email(user_id) when is_uuid(user_id) do
-    with {:ok, %@user_model{emails} = user} <- @user_model.one([id: user_id], [:emails]),
+    with {:ok, %@user_model{emails}%{emails, __struct__: @user_model} = user} <- @user_model.one([id: user_id], [:emails]),
          do: get_best_email_(emails, user)
   end
 
   def get_best_email_(emails, user) do
     case {Enum.find(emails, fn e -> e.verified end), emails} do
-      {%@email_model{} = email, _} ->
+      {%{__struct__: @email_model} = email, _} ->
         {:ok, %@email_model{email | user}}
 
       {_, [email | _]} ->
