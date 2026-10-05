@@ -13,7 +13,7 @@ defmodule Rivet.Mailer.Tools.Format do
   iex> "blue Narf bork" = human_name(%Rivet.Ident.User{id: id, name: "", handle: %Rivet.Ident.Handle{id: id, handle: "Narf"}}, opts)
   iex> "noname" = human_name(%Rivet.Ident.User{id: id, name: "", handle: %Rivet.Ident.Handle{id: id, handle: ""}}, %{noname: "noname"})
   """
-  def human_name(%@user_model{} = u, opts \\ []) do
+  def human_name(%{__struct__: @user_model} = u, opts \\ []) do
     opts = Map.merge(@default_human, Map.new(opts))
 
     if not_empty_str(u.name) do

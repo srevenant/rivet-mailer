@@ -10,14 +10,14 @@ defmodule Rivet.Mailer.Tools.Email do
   iex> expand_emails(user)
   [e]
   """
-  def expand_emails(%@user_model{emails}) when is_list(emails), do: emails
-  def expand_emails(%@user_model{} = u), do: @user_model.preload!(u, [:emails]).emails
+  def expand_emails(%{emails, __struct__: @user_model}) when is_list(emails), do: emails
+  def expand_emails(%{__struct__: @user_model} = u), do: @user_model.preload!(u, [:emails]).emails
 
   ##############################################################################
   @doc """
   future: opts can include verfied: true (or some way to only send to verified addresses)
   """
-  def get_best_email(%@user_model{} = user) do
+  def get_best_email(%{__struct__: @user_model} = user) do
     with {:ok, %@user_model{emails}} <- @user_model.preload(user, [:emails]),
          do: get_best_email_(emails, user)
   end

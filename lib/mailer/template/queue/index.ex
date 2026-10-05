@@ -1,11 +1,11 @@
 defmodule Rivet.Mailer.Template.Queue do
   use Rivet.Mailer
 
-  def mailer_queue_(t, %@email_model{} = e, assn, opts) do
+  def mailer_queue_(t, %{__struct__: @email_model} = e, assn, opts) do
     with :ok <- valid_target(e, opts), do: Dispatch.queue(e, t, assn)
   end
 
-  def mailer_queue_(t, %@user_model{} = u, assn, opts) do
+  def mailer_queue_(t, %{__struct__: @user_model} = u, assn, opts) do
     with {:ok, e} <- Tools.Email.get_best_email(u), do: mailer_queue_(t, e, assn, opts)
   end
 
@@ -15,7 +15,7 @@ defmodule Rivet.Mailer.Template.Queue do
   end
 
   ##############################################################################
-  def valid_target(%@email_model{status}, opts) do
+  def valid_target(%{__struct__: @email_model, status: status}, opts) do
     cond do
       @email_model.sendable?(status) ->
         :ok
@@ -31,19 +31,19 @@ defmodule Rivet.Mailer.Template.Queue do
   end
 
   ##############################################################################
-  def mailer_queue_all_(t, %@user_model{} = u, a), do: mailer_queue_all_(t, [u], a)
-  def mailer_queue_all_(t, %@email_model{} = e, a), do: mailer_queue_all_(t, [e], a)
+  def mailer_queue_all_(t, %{__struct__: @user_model} = u, a), do: mailer_queue_all_(t, [u], a)
+  def mailer_queue_all_(t, %{__struct__: @email_model} = e, a), do: mailer_queue_all_(t, [e], a)
 
   def mailer_queue_all_(t, targets, assns),
     do: @repo.transact(fn -> mailer_queue_all_(t, targets, assns, []) end)
 
   ####
-  def mailer_queue_all_(t, [%@user_model{} = u | rest], assigns, out) do
+  def mailer_queue_all_(t, [%{__struct__: @user_model} = u | rest], assigns, out) do
     with {:ok, e} <- Tools.Email.get_best_email(u),
          do: mailer_queue_all_(t, [e | rest], assigns, out)
   end
 
-  def mailer_queue_all_(t, [%@email_model{} = e | rest], assigns, out) do
+  def mailer_queue_all_(t, [%{__struct__: @email_model} = e | rest], assigns, out) do
     with {:ok, d} <- mailer_queue_(t, e, assigns, []),
          do: mailer_queue_all_(t, rest, assigns, [d | out])
   end

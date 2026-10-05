@@ -15,7 +15,7 @@ defmodule Rivet.Mailer.Origin do
     not_found: :atom,
     create: [:user_id, :id]
 
-  def upsert_origin(%@user_model{id: user_id}) do
+  def upsert_origin(%{__struct__: @user_model, id: user_id}) do
     build(%{user_id})
     |> insert(
       on_conflict: [set: [user_id: user_id]],
