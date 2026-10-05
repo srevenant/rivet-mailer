@@ -38,9 +38,9 @@ defmodule Rivet.Mailer do
   """
   def getcfg(key), do: Application.get_env(:rivet_mailer, key)
 
-  @enricher Application.compile_env!(:rivet_mailer, :enricher)
-  def enrich!(a, k, t), do: @enricher.enrich!(a, k, t)
-  def enrich!(a, t), do: @enricher.enrich!(a, t)
+  @local_enrich Application.compile_env!(:rivet_mailer, :local_enrich)
+  def enrich!(a, k, t), do: @local_enrich.enrich!(a, k, t)
+  def enrich!(a, t), do: @local_enrich.enrich!(a, t)
 
   def enabled(bool) when is_boolean(bool),
     do: Application.put_env(:rivet_mailer, :enabled, bool)

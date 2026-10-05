@@ -41,7 +41,7 @@ config :rivet_mailer,
   ecto_repos: [Test.Support.Mailer.Repo],
   # test config things
   mode: :test,
-  enricher: Rivet.Mailer.Local.Enrich,
+  local_enrich: Rivet.Mailer.Local.Enrich,
   # yes this is also available in mailer_templates.critical_fail, but the
   # purposes are different so it needs to be duplicated here, for testing.
   critical_fail: Test.Support.Mailer.Mock.CriticalFail,
