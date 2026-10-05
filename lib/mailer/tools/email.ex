@@ -23,7 +23,7 @@ defmodule Rivet.Mailer.Tools.Email do
   end
 
   def get_best_email(user_id) when is_uuid(user_id) do
-    with {:ok, %@user_model{emails}%{emails, __struct__: @user_model} = user} <- @user_model.one([id: user_id], [:emails]),
+    with {:ok, %{emails, __struct__: @user_model} = user} <- @user_model.one([id: user_id], [:emails]),
          do: get_best_email_(emails, user)
   end
 
