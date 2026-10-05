@@ -143,7 +143,7 @@ defmodule Rivet.Mailer.Processor.Sender do
 
   ##############################################################################
   defp update_result({status, result, _}, %Dispatch{} = d) do
-    @repo.transact(fn ->
+    Mailer.module_for(:repo).transact(fn ->
       with {:ok, update, {status, log}} <- build_dispatch_update_(status, result),
            {:ok, d} <- Dispatch.update(d, update),
            {:ok, _} <- Dispatch.Log.create(%{dispatch_id: d.id, type: status, value: log}) do

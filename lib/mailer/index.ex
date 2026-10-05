@@ -38,4 +38,6 @@ defmodule Rivet.Mailer do
 
   def enabled(bool) when is_boolean(bool),
     do: Application.put_env(:rivet_mailer, :enabled, bool)
+
+  def module_for(name), do: Application.fetch_env!(:rivet, name)
 end

@@ -10,7 +10,7 @@ defmodule Rivet.Mailer.Dispatch.Lib do
   # """
   # def unlock(lockname) do
   #   from(n in Mailer.Dispatch, where: n.lock == ^lockname)
-  #   |> @repo.update_all(set: [lock: nil])
+  #   |> Dispatch.update_all(set: [lock: nil])
   # end
 
   ##############################################################################
@@ -23,7 +23,7 @@ defmodule Rivet.Mailer.Dispatch.Lib do
 
   defp pending(), do: from(s in batch_base_query(), select: s.id)
 
-  def count_pending(), do: pending() |> @repo.aggregate(:count)
+  def count_pending(), do: pending() |> Mailer.module_for(:repo).aggregate(:count)
 
   @doc """
   iex> insert(:mailer_dispatch)
@@ -48,7 +48,7 @@ defmodule Rivet.Mailer.Dispatch.Lib do
       where: s.id in subquery(picked),
       select: s.id
     )
-    |> @repo.update_all(set: [lock: lock, locked_at: now, updated_at: now])
+    |> Dispatch.update_all(set: [lock: lock, locked_at: now, updated_at: now])
     |> case do
       {count, [_ | _] = ids} when count > 0 ->
         {:ok, lock, count, ids}
@@ -66,10 +66,10 @@ defmodule Rivet.Mailer.Dispatch.Lib do
   #   now = DateTime.utc_now() |> DateTime.shift(month: -3)
   #
   #   from(n in Dispatch, where: not is_nil(n.sent_at) and n.sent_at < ^now)
-  #   |> @repo.delete_all()
+  #   |> Dispatch.delete_all()
   #
   #   # from(n in Dispatch, where: not not is_nil(n.sent_at) and n.updated_at < ^now)
-  #   # |> @repo.aggregate(:count)
+  #   # |> Dispatch.aggregate(:count)
   # end
   #
   # def export_templates(fname) do
@@ -99,7 +99,7 @@ defmodule Rivet.Mailer.Dispatch.Lib do
   # coveralls-ignore-start
   if Application.compile_env(:rivet_mailer, :mode) == :test do
     def test_clear_pending(),
-      do: pending() |> @repo.update_all(set: [sent_at: DateTime.utc_now(), lock: nil])
+      do: pending() |> Dispatch.update_all(set: [sent_at: DateTime.utc_now(), lock: nil])
   end
 
   # coveralls-ignore-stop
