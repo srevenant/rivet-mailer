@@ -119,7 +119,7 @@ defmodule Test.Support.Mailer.Case do
   @accessors [Rivet.Mailer.Processor]
 
   setup do
-    owner = Sandbox.start_owner!(Repo, shared: false)
+    owner = Sandbox.start_owner!(@repo, shared: false)
 
     sandbox_allow_processes(owner, @accessors)
 
@@ -139,7 +139,7 @@ defmodule Test.Support.Mailer.Case do
         :ok
 
       pid ->
-        Sandbox.allow(Repo, owner, pid) in [:ok, {:already, :allowed}, {:already, :owner}]
+        Sandbox.allow(@repo, owner, pid) in [:ok, {:already, :allowed}, {:already, :owner}]
     end
   end
 
