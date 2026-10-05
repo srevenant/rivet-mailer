@@ -20,7 +20,6 @@ defmodule Rivet.Mailer.Dispatch.Log do
     aborted: 200
   )
 
-  IO.inspect(@email_model)
   typed_schema "mailer_dispatch_logs" do
     belongs_to(:dispatch, Mailer.Dispatch, type: :binary_id)
     belongs_to(:issue, @email_issue_model, type: :binary_id)
