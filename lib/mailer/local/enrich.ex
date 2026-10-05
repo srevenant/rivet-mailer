@@ -12,17 +12,17 @@ defmodule Rivet.Mailer.Local.Enrich do
 
   defmacro __using__(_) do
     quote location: :keep do
+      @behaviour Rivet.Mailer.Local.Enrich
+      
       @doc """
       enrich target based on its type and add enriched values into assigns
       """
-      @behaviour Rivet.Mailer.Local.Enrich
       def enrich!(assigns, _target), do: assigns
       defoverridable enrich!: 2
 
       @doc """
       enrich target based on its type and add enriched values into assigns under key
       """
-      @behaviour Rivet.Mailer.Local.Enrich
       def enrich!(assigns, _key, _target), do: assigns
       defoverridable enrich!: 3
     end
