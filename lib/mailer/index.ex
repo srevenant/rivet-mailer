@@ -27,7 +27,7 @@ defmodule Rivet.Mailer do
       require Logger
       import Rivet.Guards
       alias Rivet.Mailer
-      alias Rivet.Mailer.{Processor, Dispatch, Target, Utils}
+      alias Rivet.Mailer.{Processor, Dispatch, Target, Tools}
       alias Rivet.Mailer.CriticalFail
     end
   end

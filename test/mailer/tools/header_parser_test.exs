@@ -1,7 +1,7 @@
 defmodule Test.Mailer.Utils.HeaderParserTest do
   use ExUnit.Case, async: true
 
-  alias Rivet.Mailer.Utils.HeaderParser
+  alias Rivet.Mailer.Tools.HeaderParser
 
   describe "extract/1" do
     test "parses basic headers" do

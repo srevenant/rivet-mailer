@@ -48,7 +48,7 @@ defmodule Rivet.Mailer.CriticalFail do
   end
 
   def create_dispatch(email_key, assigns) do
-    with {:ok, recip} <- Mailer.Utils.Email.direct_email_address(email_key),
+    with {:ok, recip} <- Mailer.Tools.Email.direct_email_address(email_key),
          {:error, r} <- mailer_queue(recip, assigns, force: true),
          do: Logger.error("Failed to create CriticalFail dispatch", reason: r)
   end

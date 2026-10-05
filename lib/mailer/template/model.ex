@@ -6,10 +6,8 @@ defmodule Rivet.Mailer.Template do
 
   defmacro __using__(_) do
     quote location: :keep do
-      # use Rivet.Mailer
-      # import Rivet.Guards
-      import Rivet.Mailer.Utils.Format
-      alias Rivet.Mailer.{Utils, Template, Dispatch}
+      import Rivet.Mailer.Tools.Format
+      alias Rivet.Mailer.{Tools, Template, Dispatch}
 
       @behaviour Template
 
@@ -33,8 +31,6 @@ defmodule Rivet.Mailer.Template do
 
   use TypedEctoSchema
   use Rivet.Ecto.Model
-  # use Rivet.Mailer.Db
-  # use Rivet.Mailer
 
   typed_schema "mailer_templates" do
     field(:name, :string)

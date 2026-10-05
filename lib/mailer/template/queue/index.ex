@@ -6,11 +6,11 @@ defmodule Rivet.Mailer.Template.Queue do
   end
 
   def mailer_queue_(t, %User{} = u, assn, opts) do
-    with {:ok, e} <- Utils.Email.get_best_email(u), do: mailer_queue_(t, e, assn, opts)
+    with {:ok, e} <- Tools.Email.get_best_email(u), do: mailer_queue_(t, e, assn, opts)
   end
 
   def mailer_queue_(t, other, assn, _opts) do
-    with {:ok, %Email{} = e} <- Utils.Email.direct_email_address(other),
+    with {:ok, %Email{} = e} <- Tools.Email.direct_email_address(other),
          do: Dispatch.queue(e, t, assn)
   end
 
@@ -39,7 +39,7 @@ defmodule Rivet.Mailer.Template.Queue do
 
   ####
   def mailer_queue_all_(t, [%User{} = u | rest], assigns, out) do
-    with {:ok, e} <- Utils.Email.get_best_email(u),
+    with {:ok, e} <- Tools.Email.get_best_email(u),
          do: mailer_queue_all_(t, [e | rest], assigns, out)
   end
 

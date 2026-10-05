@@ -1,4 +1,4 @@
-defmodule Rivet.Mailer.Utils.Code do
+defmodule Rivet.Mailer.Tools.Code do
   use Rivet.Mailer
 
   def enrich_with_code(user_id, type, meta \\ %{}) do

@@ -23,7 +23,7 @@ defmodule Rivet.Mailer.Template.Send do
   ##############################################################################
   defp deliver(%Swoosh.Email{} = e, true) do
     Logger.debug("Sending email", to: e.to, from: e.from, subject: e.subject)
-    Rivet.Mailer.Backend.deliver(e)
+    Rivet.Mailer.Local.Backend.deliver(e)
   end
 
   ####
@@ -83,7 +83,7 @@ defmodule Rivet.Mailer.Template.Send do
        end)
        |> Swoosh.Email.subject(d.subject)
        |> Swoosh.Email.html_body("<html><body>#{d.body}</body></html>")
-       |> Swoosh.Email.text_body(Utils.Format.html2text(d.body))}
+       |> Swoosh.Email.text_body(Tools.Format.html2text(d.body))}
     end
   end
 

@@ -1,4 +1,4 @@
-defmodule Rivet.Mailer.Utils.HeaderParser do
+defmodule Rivet.Mailer.Tools.HeaderParser do
   @moduledoc """
 
   Lightweight email header parser, without all the :mimemail overhead

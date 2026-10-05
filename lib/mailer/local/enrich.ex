@@ -1,4 +1,4 @@
-defmodule Rivet.Mailer.Enricher do
+defmodule Rivet.Mailer.Local.Enrich do
   @moduledoc """
   This is for runtime assigns enrichment when templates run, and can be
   overridden locally to customize it.
@@ -15,14 +15,14 @@ defmodule Rivet.Mailer.Enricher do
       @doc """
       enrich target based on its type and add enriched values into assigns
       """
-      @behaviour Rivet.Mailer.Utils.Enrichment
+      @behaviour Rivet.Mailer.Tools.Enrichment
       def enrich!(assigns, _target), do: assigns
       defoverridable enrich!: 2
 
       @doc """
       enrich target based on its type and add enriched values into assigns under key
       """
-      @behaviour Rivet.Mailer.Utils.Enrichment
+      @behaviour Rivet.Mailer.Tools.Enrichment
       def enrich!(assigns, _key, _target), do: assigns
       defoverridable enrich!: 3
     end
@@ -139,8 +139,8 @@ defmodule Rivet.Mailer.Enricher do
   # def enrich_user!(assigns, key, user) do
   #   Map.put(assigns, key, %{
   #     handle: get_user_ref!(user),
-  #     name: Rivet.Mailer.Utils.Format.human_name(user),
-  #     hello: Rivet.Mailer.Utils.Format.human_name(user, prefix: "Hello", noname: "Hello"),
+  #     name: Rivet.Mailer.Tools.Format.human_name(user),
+  #     hello: Rivet.Mailer.Tools.Format.human_name(user, prefix: "Hello", noname: "Hello"),
   #     user: user
   #   })
   # end

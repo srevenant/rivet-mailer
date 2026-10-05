@@ -1,9 +1,9 @@
 defmodule Test.Mailer.Utils.IndexTest do
   use Test.Support.Mailer.Case
-  import Rivet.Mailer.Utils.Email, only: [get_best_email: 1]
+  import Rivet.Mailer.Tools.Email, only: [get_best_email: 1]
 
-  doctest Rivet.Mailer.Utils.Email, import: true
-  doctest Rivet.Mailer.Utils.Format, import: true
+  doctest Rivet.Mailer.Tools.Email, import: true
+  doctest Rivet.Mailer.Tools.Format, import: true
 
   test "get_best_email" do
     assert %{user, id: e_id} = insert(:ident_email, verified: true)

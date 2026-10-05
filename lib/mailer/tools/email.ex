@@ -1,4 +1,4 @@
-defmodule Rivet.Mailer.Utils.Email do
+defmodule Rivet.Mailer.Tools.Email do
   use Rivet.Mailer
 
   ##############################################################################

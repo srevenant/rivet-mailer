@@ -1,4 +1,4 @@
-defmodule Rivet.Mailer.Utils.Format do
+defmodule Rivet.Mailer.Tools.Format do
   use Rivet.Mailer
 
   @default_human %{
