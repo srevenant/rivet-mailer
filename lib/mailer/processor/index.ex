@@ -15,11 +15,16 @@ defmodule Rivet.Mailer.Processor do
     status = :pending
     lock = nil
 
-  TODO: A separate cron process that looks for stranded/failed things (ABORTED).
-    There are two scenarios to appear in this report:
+  TODO:
+    1. A separate watchdog cron process that looks for stranded/failed things (ABORTED).
+       There are two scenarios to appear in this report:
 
-    - status = :aborted  (perhaps we need a separate confirmed_aborted status to keep it from the daily report)
-    - status = :pending but a lock remains after too long a period
+      - status = :aborted  (perhaps we need a separate confirmed_aborted status to keep it from the daily report)
+      - status = :pending but a lock remains after too long a period
+
+    2. Allow prep_dispatch to return :skip and have it run & process but act as
+       if in disabled mode and not actually send (for debugging individually while
+       in prod).
 
   """
 
@@ -83,7 +88,6 @@ defmodule Rivet.Mailer.Processor do
     |> requeue_next()
   end
 
-  # TODO: Add something to monitor queue size and alert if its getting too big
   defp monitor_queue_size(state, x), do: {state, x}
 
   ##############################################################################

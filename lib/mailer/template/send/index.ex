@@ -12,7 +12,6 @@ defmodule Rivet.Mailer.Template.Send do
   end
 
   ##############################################################################
-  # TODO: migrate/rename "" to "default"
   @configs ["default"]
   defp build_context(%Dispatch{} = d) do
     headers = Map.put(d.headers, "X-Codex-ID", d.id)

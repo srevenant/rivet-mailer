@@ -4,13 +4,6 @@ defmodule Rivet.Mailer.Processor.Sender do
   def send(%Dispatch{} = d) do
     try do
       d.template.dispatch(d)
-      #
-      # TODO: revise dispatch:
-      # - return updated %Dispatch{} with result inline; then passing (d) below
-      #   isnt needed.
-      # - support :skip from dispatch_prep so it runs as if mailer=disabled and
-      #   logs using that structure so :skipped below goes away
-      # # and then the :skip scenario
     rescue
       err -> {:stacktrace, err, __STACKTRACE__}
     end
