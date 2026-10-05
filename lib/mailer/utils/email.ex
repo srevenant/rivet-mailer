@@ -60,7 +60,7 @@ defmodule Rivet.Mailer.Utils.Email do
   {:ok, %Email{address: "bob@blah.com"}}
 
   iex> direct_email_address(:sales)
-  {:ok, %Email{address: "libreon-support@libreon.net"}}
+  {:ok, %Email{address: "tardis-support@tardis.net"}}
 
   iex> direct_email_address(10)
   {:error, "Invalid email address"}

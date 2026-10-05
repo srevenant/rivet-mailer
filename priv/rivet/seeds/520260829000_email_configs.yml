@@ -1,6 +1,7 @@
 ---
 type: Rivet.Data
 version: 2.1
+env: test
 
 ---
 type: Rivet.Mailer.Config
@@ -9,7 +10,7 @@ values:
   site: default
   group: "addrs"
   key: "from"
-  value: [ "Libreon Team", "no-reply@libreon.net" ]
+  value: [ "Tardis Team", "no-reply@tardis.net" ]
 
 ---
 type: Rivet.Mailer.Config
@@ -18,7 +19,7 @@ values:
   site: default
   group: "addrs"
   key: "verify"
-  value: [ "Libreon Team", "verified@libreon.net" ]
+  value: [ "Tardis Team", "verified@tardis.net" ]
 
 ---
 type: Rivet.Mailer.Config
@@ -27,7 +28,7 @@ values:
   site: default
   group: addrs
   key: support
-  value: ["Libreon Support", "libreon-support@libreon.net"]
+  value: ["Tardis Support", "tardis-support@tardis.net"]
 
 ---
 type: Rivet.Mailer.Config
@@ -36,7 +37,7 @@ values:
   site: default
   group: addrs
   key: sales
-  value: ["Libreon Support", "libreon-support@libreon.net" ]
+  value: ["Tardis Support", "tardis-support@tardis.net" ]
 
 ---
 type: Rivet.Mailer.Config
@@ -45,7 +46,7 @@ values:
   site: default
   group: addrs
   key: errors
-  value: ["Libreon Errors", "brandon@libreon.net" ]
+  value: ["Tardis Errors", "brandon@tardis.net" ]
 
 ---
 type: Rivet.Mailer.Config
@@ -54,7 +55,7 @@ values:
   site: default
   group: site
   key: name
-  value: "Libreon"
+  value: "Tardis"
 
 ---
 type: Rivet.Mailer.Config
@@ -63,7 +64,7 @@ values:
   site: default
   group: site
   key: link_back
-  value: "https://api.libreon.net"
+  value: "https://api.tardis.net"
 
 ---
 type: Rivet.Mailer.Config
@@ -72,7 +73,7 @@ values:
   site: default
   group: site
   key: link_front
-  value: "https://libreon.net"
+  value: "https://tardis.net"
 
 ---
 type: Rivet.Mailer.Config
@@ -81,7 +82,7 @@ values:
   site: default
   group: site
   key: html_support
-  value: "<a href=\"https://libreon.net/support/\">Libreon Support Team</a>"
+  value: "<a href=\"https://tardis.net/support/\">Tardis Support Team</a>"
 
 ---
 type: Rivet.Mailer.Config
@@ -90,4 +91,4 @@ values:
   site: default
   group: site
   key: footer
-  value: "<p>Sincerely, Libreon<p>"
+  value: "<p>Sincerely, Tardis<p>"

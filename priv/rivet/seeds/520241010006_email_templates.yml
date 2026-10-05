@@ -1,0 +1,36 @@
+---
+type: Rivet.Data
+version: 2.1
+env: test
+
+---
+type: Rivet.Mailer.Template
+values:
+  id: f4a6ed2e-3528-4e97-9590-3df5314d72ff
+  name: Elixir.Rivet.Mailer.CriticalFail
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    Codex System Error
+    === body
+    <p>Something bad happened!
+    <p><pre><%= @log %></pre>
+
+---
+type: Rivet.Mailer.Template
+values:
+  id: 20fb335d-2e70-4203-b7de-3c28fd806a5c
+  name: Elixir.Test.Support.Mailer.FunctionalTemplate
+  data: |-
+    === rivet-engram-v1
+    sections:
+      subject: eex
+      body: eex
+    === subject
+    <%= @site.name %> Password Changed
+    === body
+    <p>The account at <%= @site.name %> associated with this email had its password changed.
+    <p><%= @site.footer %>

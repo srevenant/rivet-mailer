@@ -29,6 +29,6 @@ defmodule Test.Mailer.Config.IndexTest do
     end
 
     # coverage
-    assert "Libreon" = Config.Cache.getsite("name")
+    assert "Tardis" = Config.getsite("name")
   end
 end
