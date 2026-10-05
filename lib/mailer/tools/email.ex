@@ -30,10 +30,10 @@ defmodule Rivet.Mailer.Tools.Email do
   def get_best_email_(emails, user) do
     case {Enum.find(emails, fn e -> e.verified end), emails} do
       {%{__struct__: @email_model} = email, _} ->
-        {:ok, %@email_model{email | user}}
+        {:ok, Map.put(email, :user, user)}
 
       {_, [email | _]} ->
-        {:ok, %@email_model{email | user}}
+        {:ok, Map.put(email, :user, user)}
 
       {_, []} ->
         Logger.error("Cannot get_email for user with no email!", user_id: user.id)
@@ -67,9 +67,9 @@ defmodule Rivet.Mailer.Tools.Email do
   """
 
   def direct_email_address([<<_name::binary>>, <<addr::binary>>]),
-    do: {:ok, %@email_model{address: addr}}
+    do: {:ok, struct(@email_model, %{address: addr})}
 
-  def direct_email_address(<<addr::binary>>), do: {:ok, %@email_model{address: addr}}
+  def direct_email_address(<<addr::binary>>), do: {:ok, struct(@email_model, %{address: addr})}
 
   # site email uses atoms; extract with that then process result
   def direct_email_address(key) when is_atom(key),
