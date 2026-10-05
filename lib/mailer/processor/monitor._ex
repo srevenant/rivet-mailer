@@ -113,7 +113,7 @@ defmodule Rivet.Mailer.Processor.Monitor do
           )
       }
     )
-    |> Repo.all()
+    |> @repo.all()
   end
 
   ##############################################################################
@@ -148,7 +148,7 @@ defmodule Rivet.Mailer.Processor.Monitor do
           )
       }
     )
-    |> Repo.all()
+    |> @repo.all()
   end
 
   ##############################################################################
@@ -182,7 +182,7 @@ defmodule Rivet.Mailer.Processor.Monitor do
           )
       }
     )
-    |> Repo.all()
+    |> @repo.all()
   end
 
   ##############################################################################
@@ -240,7 +240,7 @@ defmodule Rivet.Mailer.Processor.Monitor do
           )
       }
     )
-    |> Repo.all()
+    |> @repo.all()
   end
 
   ##############################################################################

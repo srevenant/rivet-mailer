@@ -15,7 +15,7 @@ defmodule Test.Support.Mailer.Mock.GoodTemplate do
   def dispatch(%{id: id, lock: lock, assigns: %{error: "delete_siblings"}}) do
     # make a problem for our sibling
     from(d in Rivet.Mailer.Dispatch, where: d.lock == ^lock and d.id != ^id)
-    |> Repo.delete_all()
+    |> @repo.delete_all()
 
     {:ok, "mock template sent"}
   end

@@ -35,7 +35,7 @@ defmodule Rivet.Mailer.Template.Queue do
   def mailer_queue_all_(t, %@email_model{} = e, a), do: mailer_queue_all_(t, [e], a)
 
   def mailer_queue_all_(t, targets, assns),
-    do: Repo.transact(fn -> mailer_queue_all_(t, targets, assns, []) end)
+    do: @repo.transact(fn -> mailer_queue_all_(t, targets, assns, []) end)
 
   ####
   def mailer_queue_all_(t, [%@user_model{} = u | rest], assigns, out) do

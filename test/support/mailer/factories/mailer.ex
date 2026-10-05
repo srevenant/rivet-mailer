@@ -66,7 +66,7 @@ defmodule Test.Support.Mailer.Factories.Mailer do
         t = DateTime.shift(t, minute: minutes)
 
         from(u in @user_model, as: :u, where: u.id == ^u_id)
-        |> Repo.update_all(set: [inserted_at: t, updated_at: t])
+        |> @repo.update_all(set: [inserted_at: t, updated_at: t])
         |> case do
           {1, _} -> %{u | inserted_at: t, updated_at: t}
         end
