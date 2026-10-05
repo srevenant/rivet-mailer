@@ -4,6 +4,13 @@ defmodule Rivet.Mailer.Processor.Sender do
   def send(%Dispatch{} = d) do
     try do
       d.template.dispatch(d)
+      #
+      # TODO: revise dispatch:
+      # - return updated %Dispatch{} with result inline; then passing (d) below
+      #   isnt needed.
+      # - support :skip from dispatch_prep so it runs as if mailer=disabled and
+      #   logs using that structure so :skipped below goes away
+      # # and then the :skip scenario
     rescue
       err -> {:stacktrace, err, __STACKTRACE__}
     end
@@ -93,39 +100,39 @@ defmodule Rivet.Mailer.Processor.Sender do
   defp log_result({:skipped, assigns}, %Dispatch{} = d) do
     Logger.warning("skipping email dispatch", assigns: assigns, dispatch_id: d.id)
 
-    ############################################################################
-    #                                                                          #
-    # short-circuit hackery until Rivet.Mailer allows this without sending      #
-    #                                                                          #
-    {:ok, config} = Rivet.Mailer.Config.load_site("")
-
-    from_key = Map.get(assigns, :from_key, [:addrs, :from])
-
-    assigns = Map.merge(config, assigns)
-
-    assigns =
-      put_in(assigns, from_key, get_in(assigns, from_key))
-      |> Map.put(:recipient, d.target.email)
-
-    case d.template.generate(d.target.email, assigns) do
-      {:ok, s, b} ->
-        IO.puts("\n\nSUBJECT: #{s}\n")
-        IO.puts(b)
-        IO.puts("\n\n")
-
-      {:error, ugly} ->
-        {:ok, t} = Rivet.Mailer.Template.one(name: "#{d.template}")
-        IO.puts("\n---------------TEMPLATE #{d.template}\n")
-        IO.puts(t.data)
-        IO.puts("\n-------------------------------------\n")
-        IO.inspect(ugly)
-        IO.puts("Waiting 5 seconds...")
-        Process.sleep(5000)
-    end
-
-    #                                                                          #
-    #                                                                          #
-    ############################################################################
+    # ############################################################################
+    # #                                                                          #
+    # # short-circuit hackery until Rivet.Mailer allows this without sending      #
+    # #                                                                          #
+    # {:ok, config} = Rivet.Mailer.Config.load_site("")
+    #
+    # from_key = Map.get(assigns, :from_key, [:addrs, :from])
+    #
+    # assigns = Map.merge(config, assigns)
+    #
+    # assigns =
+    #   put_in(assigns, from_key, get_in(assigns, from_key))
+    #   |> Map.put(:recipient, d.target.email)
+    #
+    # case d.template.generate(d.target.email, assigns) do
+    #   {:ok, s, b} ->
+    #     IO.puts("\n\nSUBJECT: #{s}\n")
+    #     IO.puts(b)
+    #     IO.puts("\n\n")
+    #
+    #   {:error, ugly} ->
+    #     {:ok, t} = Rivet.Mailer.Template.one(name: "#{d.template}")
+    #     IO.puts("\n---------------TEMPLATE #{d.template}\n")
+    #     IO.puts(t.data)
+    #     IO.puts("\n-------------------------------------\n")
+    #     IO.inspect(ugly)
+    #     IO.puts("Waiting 5 seconds...")
+    #     Process.sleep(5000)
+    # end
+    #
+    # #                                                                          #
+    # #                                                                          #
+    # ############################################################################
 
     {:skipped, %{message: "skipped"}, []}
   end

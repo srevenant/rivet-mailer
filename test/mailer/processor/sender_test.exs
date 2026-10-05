@@ -63,5 +63,7 @@ defmodule Test.Mailer.Processor.SenderTest do
              assert {:aborted, "Mailer DISABLED: unexpected result shape", response: :wat} =
                       Sender.normalize_result(:wat)
            end) =~ ~r/DISABLED due to unexpected result/
+
+    assert {:aborted, "wat", []} = Sender.normalize_result({:error, :wat, []})
   end
 end

@@ -11,8 +11,4 @@ defmodule Test.Mailer.Origin.ModelTest do
     assert {:ok, _} = Origin.delete(d)
     assert {:ok, ^id} = Origin.upsert_origin(user)
   end
-
-  # test "upsert_origin" do
-  #   insert(:user)
-  # end
 end

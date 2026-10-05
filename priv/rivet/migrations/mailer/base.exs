@@ -20,7 +20,7 @@ defmodule Rivet.Mailer.Migrations.Mailer.Base do
       timestamps()
     end
 
-    # user can be duplicated as the user can have many email addrs
+    # user can be duplicated as the user can have many email addrs, and :address too
     # create(unique_index(:mailer_targets, [:user_id], where: "user_id IS NOT NULL"))
     create(unique_index(:mailer_targets, [:email_id]))
 
