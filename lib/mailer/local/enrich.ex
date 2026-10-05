@@ -15,14 +15,14 @@ defmodule Rivet.Mailer.Local.Enrich do
       @doc """
       enrich target based on its type and add enriched values into assigns
       """
-      @behaviour Rivet.Mailer.Tools.Enrichment
+      @behaviour Rivet.Mailer.Local.Enrich
       def enrich!(assigns, _target), do: assigns
       defoverridable enrich!: 2
 
       @doc """
       enrich target based on its type and add enriched values into assigns under key
       """
-      @behaviour Rivet.Mailer.Tools.Enrichment
+      @behaviour Rivet.Mailer.Local.Enrich
       def enrich!(assigns, _key, _target), do: assigns
       defoverridable enrich!: 3
     end
