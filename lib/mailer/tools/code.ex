@@ -2,13 +2,13 @@ defmodule Rivet.Mailer.Tools.Code do
   use Rivet.Mailer
 
   def enrich_with_code(user_id, type, meta \\ %{}) do
-    with {:ok, code} <- UserCode.Lib.reset_generate(user_id, type, meta) do
+    with {:ok, code} <- @user_code_model.Lib.reset_generate(user_id, type, meta) do
       {:ok, Map.put(meta, :code_id, code.id)}
     end
   end
 
   def code_enrich_assigns(%Dispatch{target, assigns: %{code_id} = assigns} = d) do
-    with {:ok, %{user} = code} <- UserCode.one([id: code_id], user: [:factors]) do
+    with {:ok, %{user} = code} <- @user_code_model.one([id: code_id], user: [:factors]) do
       expires = Rivet.Utils.Time.ago(code.expires, format: :long)
 
       if user.id != target.user_id do

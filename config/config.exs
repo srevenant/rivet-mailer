@@ -18,6 +18,7 @@ config :rivet,
   user_model: Rivet.Ident.User,
   user_code_model: Rivet.Ident.UserCode,
   email_model: Rivet.Ident.Email,
+  email_issue_model: Rivet.Ident.Email.Issue,
   org_model: Test.Support.Mailer.Mock.OrgModel,
   project_model: Test.Support.Mailer.Mock.ProjectModel,
   handle_model: Rivet.Ident.Handle,
@@ -41,7 +42,7 @@ config :rivet_mailer,
   ecto_repos: [Test.Support.Mailer.Repo],
   # test config things
   mode: :test,
-  local_enrich: Rivet.Mailer.Local.Enrich,
+  local_enrich: Test.Support.Mailer.Enrich,
   # yes this is also available in mailer_templates.critical_fail, but the
   # purposes are different so it needs to be duplicated here, for testing.
   critical_fail: Test.Support.Mailer.Mock.CriticalFail,

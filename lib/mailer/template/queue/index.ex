@@ -1,23 +1,23 @@
 defmodule Rivet.Mailer.Template.Queue do
   use Rivet.Mailer
 
-  def mailer_queue_(t, %Email{} = e, assn, opts) do
+  def mailer_queue_(t, %@email_model{} = e, assn, opts) do
     with :ok <- valid_target(e, opts), do: Dispatch.queue(e, t, assn)
   end
 
-  def mailer_queue_(t, %User{} = u, assn, opts) do
+  def mailer_queue_(t, %@user_model{} = u, assn, opts) do
     with {:ok, e} <- Tools.Email.get_best_email(u), do: mailer_queue_(t, e, assn, opts)
   end
 
   def mailer_queue_(t, other, assn, _opts) do
-    with {:ok, %Email{} = e} <- Tools.Email.direct_email_address(other),
+    with {:ok, %@email_model{} = e} <- Tools.Email.direct_email_address(other),
          do: Dispatch.queue(e, t, assn)
   end
 
   ##############################################################################
-  def valid_target(%Email{status}, opts) do
+  def valid_target(%@email_model{status}, opts) do
     cond do
-      Email.sendable?(status) ->
+      @email_model.sendable?(status) ->
         :ok
 
       Keyword.get(opts, :force) ->
@@ -31,19 +31,19 @@ defmodule Rivet.Mailer.Template.Queue do
   end
 
   ##############################################################################
-  def mailer_queue_all_(t, %User{} = u, a), do: mailer_queue_all_(t, [u], a)
-  def mailer_queue_all_(t, %Email{} = e, a), do: mailer_queue_all_(t, [e], a)
+  def mailer_queue_all_(t, %@user_model{} = u, a), do: mailer_queue_all_(t, [u], a)
+  def mailer_queue_all_(t, %@email_model{} = e, a), do: mailer_queue_all_(t, [e], a)
 
   def mailer_queue_all_(t, targets, assns),
     do: Repo.transact(fn -> mailer_queue_all_(t, targets, assns, []) end)
 
   ####
-  def mailer_queue_all_(t, [%User{} = u | rest], assigns, out) do
+  def mailer_queue_all_(t, [%@user_model{} = u | rest], assigns, out) do
     with {:ok, e} <- Tools.Email.get_best_email(u),
          do: mailer_queue_all_(t, [e | rest], assigns, out)
   end
 
-  def mailer_queue_all_(t, [%Email{} = e | rest], assigns, out) do
+  def mailer_queue_all_(t, [%@email_model{} = e | rest], assigns, out) do
     with {:ok, d} <- mailer_queue_(t, e, assigns, []),
          do: mailer_queue_all_(t, rest, assigns, [d | out])
   end

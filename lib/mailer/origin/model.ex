@@ -6,7 +6,7 @@ defmodule Rivet.Mailer.Origin do
   use Rivet.Mailer
 
   typed_schema "mailer_origins" do
-    belongs_to(:user, User, type: :binary_id)
+    belongs_to(:user, @user_model, type: :binary_id)
     # belongs_to(:org, Org, type: :binary_id)
     timestamps()
   end
@@ -15,7 +15,7 @@ defmodule Rivet.Mailer.Origin do
     not_found: :atom,
     create: [:user_id, :id]
 
-  def upsert_origin(%User{id: user_id}) do
+  def upsert_origin(%@user_model{id: user_id}) do
     build(%{user_id})
     |> insert(
       on_conflict: [set: [user_id: user_id]],
