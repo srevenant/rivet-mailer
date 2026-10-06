@@ -32,9 +32,11 @@ defmodule Rivet.Mailer do
   """
   def getcfg(key), do: Application.get_env(:rivet_mailer, key)
 
-  @local_enrich Application.compile_env!(:rivet_mailer, :local_enrich)
-  def enrich!(a, k, t), do: @local_enrich.enrich!(a, k, t)
-  def enrich!(a, t), do: @local_enrich.enrich!(a, t)
+  # circular dep problem where localized enrich is not compiled while this is
+  # compiled, so make it a runtime thing.
+  defp get_local(), do: Application.fetch_env!(:rivet_mailer, :local_enrich)
+  def enrich!(a, k, t), do: get_local().enrich!(a, k, t)
+  def enrich!(a, t), do: get_local().enrich!(a, t)
 
   def enabled(bool) when is_boolean(bool),
     do: Application.put_env(:rivet_mailer, :enabled, bool)
