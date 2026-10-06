@@ -67,9 +67,9 @@ defmodule Rivet.Mailer.Tools.Email do
   """
 
   def direct_email_address([<<_name::binary>>, <<addr::binary>>]),
-    do: {:ok, struct(Mailer.model_for(:email_model)), %{address: addr})}
+    do: {:ok, struct(Mailer.model_for(:email_model), %{address: addr})}
 
-  def direct_email_address(<<addr::binary>>), do: {:ok, struct(Mailer.model_for(:email_model)), %{address: addr})}
+  def direct_email_address(<<addr::binary>>), do: {:ok, struct(Mailer.model_for(:email_model), %{address: addr})}
 
   # site email uses atoms; extract with that then process result
   def direct_email_address(key) when is_atom(key),
