@@ -19,7 +19,7 @@ defmodule Rivet.Mailer.Tools.Format do
     if not_empty_str(u.name) do
       "#{opts.prefix} #{u.name} #{opts.suffix}"
     else
-      case @user_model.preload(u, :handle) do
+      case Rivet.Mailer.model_for(:user_model).preload(u, :handle) do
         {:ok, %{handle: %{handle: handle}}} when not_empty_str(handle) ->
           "#{opts.prefix} #{handle} #{opts.suffix}"
 
