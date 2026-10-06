@@ -18,7 +18,7 @@ defmodule Rivet.Mailer.MixProject do
         ignore_warnings: ".dialyzer_ignore.exs",
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
       ],
-      xref: [], # exclude: List.wrap(Application.get_env(:rivet, :repo))],
+      xref: [exclude: List.wrap(Application.get_env(:rivet, :repo))],
       aliases: aliases(),
       compilers: [:es6_maps | Mix.compilers()],
       docs: [main: "Rivet.Mailer"]
