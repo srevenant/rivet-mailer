@@ -32,13 +32,7 @@ defmodule Rivet.Mailer.Tools.Email do
   def get_best_email_(emails, user) do
     case {Enum.find(emails, fn e -> e.verified end), emails} do
       {%{__struct__: @email_model} = email, _} ->
-        {:ok, %@email_model{email | user}}
-        #Map.put(email, :user, user)}
-
-
-
-
-
+        {:ok, Map.put(email, :user, user)}
 
       {_, [email | _]} ->
         {:ok, Map.put(email, :user, user)}
