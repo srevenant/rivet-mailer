@@ -2,6 +2,14 @@ defmodule Rivet.Mailer.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/srevenant/rivet-ident"
+  @xref_ignore_modules [
+              :repo,
+              :user_model,
+              :user_code_model,
+              :email_model,
+              :email_issue_model,
+              :handle_model
+            ]
   def project do
     [
       app: :rivet_mailer,
@@ -18,21 +26,10 @@ defmodule Rivet.Mailer.MixProject do
         ignore_warnings: ".dialyzer_ignore.exs",
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
       ],
-      xref: [
-        exclude:
-          # this stops the warnings about a schema not existing
-          Enum.map(
-            [
-              :repo,
-              :user_model,
-              :user_code_model,
-              :email_model,
-              :email_issue_model,
-              :handle_model
-            ],
-            &Application.get_env(:rivet, &1)
-          )
-      ],
+      # this stops the warnings about a schema not existing, but only
+      # for compiler module check warnings. It will not stop the Ecto
+      # warnings.
+      xref: [exclude: Enum.map(@xref_ignore_modules, &Application.get_env(:rivet, &1))],
       aliases: aliases(),
       compilers: [:es6_maps | Mix.compilers()],
       docs: [main: "Rivet.Mailer"]

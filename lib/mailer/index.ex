@@ -39,4 +39,10 @@ defmodule Rivet.Mailer do
     do: Application.put_env(:rivet_mailer, :enabled, bool)
 
   def module_for(name), do: Application.fetch_env!(:rivet, name)
+
+  @IO.puts("""
+  ==> rivet_mailer
+  [Rivet.Mailer] Ecto may report invalid association warnings for consumer-provided
+  schemas during compilation. These warnings are expected and can be ignored.
+  """)
 end
