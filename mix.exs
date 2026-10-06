@@ -8,7 +8,8 @@ defmodule Rivet.Mailer.MixProject do
               :user_code_model,
               :email_model,
               :email_issue_model,
-              :handle_model
+              :handle_model,
+              :local_mailer
             ]
   def project do
     [

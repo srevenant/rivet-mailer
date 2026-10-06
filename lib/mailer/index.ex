@@ -32,7 +32,7 @@ defmodule Rivet.Mailer do
   """
   def getcfg(key), do: Application.get_env(:rivet_mailer, key)
 
-  @local_enrich Application.fetch_env!(:rivet_mailer, :local_enrich)
+  @local_enrich Application.compile_env!(:rivet_mailer, :local_enrich)
   def enrich!(a, k, t), do: @local_enrich.enrich!(a, k, t)
   def enrich!(a, t), do: @local_enrich.enrich!(a, t)
 
