@@ -15,7 +15,7 @@ defmodule Rivet.Mailer.Template.Queue do
   end
 
   ##############################################################################
-  def valid_target(%Email{, status: status}, opts) do
+  def valid_target(%Email{status: status}, opts) do
     cond do
       @email_model.sendable?(status) ->
         :ok
