@@ -1,7 +1,7 @@
 defmodule Rivet.Mailer.Template.Queue do
   use Rivet.Mailer
 
-  def mailer_queue_(t, %Email{} = e, assn, opts) do
+  def mailer_queue_(t, %{__struct__: @email_model} = e, assn, opts) do
     with :ok <- valid_target(e, opts), do: Dispatch.queue(e, t, assn)
   end
 
@@ -32,7 +32,7 @@ defmodule Rivet.Mailer.Template.Queue do
 
   ##############################################################################
   def mailer_queue_all_(t, %{__struct__: @user_model} = u, a), do: mailer_queue_all_(t, [u], a)
-  def mailer_queue_all_(t, %Email{} = e, a), do: mailer_queue_all_(t, [e], a)
+  def mailer_queue_all_(t, %{__struct__: @email_model} = e, a), do: mailer_queue_all_(t, [e], a)
 
   def mailer_queue_all_(t, targets, assns),
     do: Mailer.module_for(:repo).transact(fn -> mailer_queue_all_(t, targets, assns, []) end)
@@ -43,7 +43,7 @@ defmodule Rivet.Mailer.Template.Queue do
          do: mailer_queue_all_(t, [e | rest], assigns, out)
   end
 
-  def mailer_queue_all_(t, [%Email{} = e | rest], assigns, out) do
+  def mailer_queue_all_(t, [%{__struct__: @email_model} = e | rest], assigns, out) do
     with {:ok, d} <- mailer_queue_(t, e, assigns, []),
          do: mailer_queue_all_(t, rest, assigns, [d | out])
   end
