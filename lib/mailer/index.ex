@@ -3,12 +3,12 @@ defmodule Rivet.Mailer do
   # Context
   defmacro __using__(_) do
     quote location: :keep do
-      @user_model  Application.compile_env!(:rivet, :user_model)
-      @user_code_model  Application.compile_env!(:rivet, :user_code_model)
-      @email_model  Application.compile_env!(:rivet, :email_model)
-      @email_issue_model  Application.compile_env!(:rivet, :email_issue_model)
-      @org_model  Application.compile_env!(:rivet, :org_model)
-      @handle_model  Application.compile_env!(:rivet, :handle_model)
+      @user_model Application.compile_env!(:rivet, :user_model)
+      @user_code_model Application.compile_env!(:rivet, :user_code_model)
+      @email_model Application.compile_env!(:rivet, :email_model)
+      @email_issue_model Application.compile_env!(:rivet, :email_issue_model)
+      @org_model Application.compile_env!(:rivet, :org_model)
+      @handle_model Application.compile_env!(:rivet, :handle_model)
       @repo Application.compile_env!(:rivet, :repo)
 
       @batch_interval_pending Application.compile_env!(:rivet_mailer, :batch_interval_pending)

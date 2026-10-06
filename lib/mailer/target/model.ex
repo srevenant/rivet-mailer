@@ -22,7 +22,8 @@ defmodule Rivet.Mailer.Target do
     update: [:email_id, :user_id, :address]
 
   # direct email with no internal user/email records
-  def upsert_email(%{__struct__: @email_model, address, user_id: nil}) when not_empty_str(address) do
+  def upsert_email(%{address, __struct__: @email_model, user_id: nil})
+      when not_empty_str(address) do
     with {:ok, %__MODULE__{id: target_id}} <- create(%{address}), do: {:ok, target_id}
   end
 
