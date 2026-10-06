@@ -22,7 +22,7 @@ defmodule Rivet.Mailer.Dispatch.Log do
 
   typed_schema "mailer_dispatch_logs" do
     belongs_to(:dispatch, Mailer.Dispatch, type: :binary_id)
-    belongs_to(:issue, Rivet.Ident.Email.Issue, type: :binary_id)
+    belongs_to(:issue, @email_model, type: :binary_id)
     field(:type, Type)
     field(:value, :map)
     timestamps()
