@@ -19,7 +19,7 @@ defmodule Rivet.Mailer.MixProject do
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
       ],
       xref: [exclude: [
-        List.wrap(Application.get_env(:rivet, :repo)),
+        Application.get_env(:rivet, :repo),
         Application.get_env(:rivet, :user_model),
         Application.get_env(:rivet, :email_model),
         Application.get_env(:rivet, :email_issue_model)
