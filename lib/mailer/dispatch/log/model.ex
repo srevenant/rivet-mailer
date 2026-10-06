@@ -48,7 +48,7 @@ defmodule Rivet.Mailer.Dispatch.Log do
       Mailer.Dispatch.update(s, %{status})
       |> report_if_error("Unable to update Mailer.Dispatch", status: status)
 
-      {:ok, update} = Mailer.module_for(:email_issue_model).log(t.email_id, type, log)
+      {:ok, update} = @email_issue_model.log(t.email_id, type, log)
 
       %{type, dispatch_id: id}
       |> Map.merge(update)

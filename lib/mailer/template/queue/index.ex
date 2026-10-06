@@ -17,7 +17,7 @@ defmodule Rivet.Mailer.Template.Queue do
   ##############################################################################
   def valid_target(%{__struct__: @email_model, status: status}, opts) do
     cond do
-      Mailer.module_for(:email_model).sendable?(status) ->
+      @email_model.sendable?(status) ->
         :ok
 
       Keyword.get(opts, :force) ->
@@ -35,7 +35,7 @@ defmodule Rivet.Mailer.Template.Queue do
   def mailer_queue_all_(t, %{__struct__: @email_model} = e, a), do: mailer_queue_all_(t, [e], a)
 
   def mailer_queue_all_(t, targets, assns),
-    do: Mailer.module_for(:repo).transact(fn -> mailer_queue_all_(t, targets, assns, []) end)
+    do: @repo.transact(fn -> mailer_queue_all_(t, targets, assns, []) end)
 
   ####
   def mailer_queue_all_(t, [%{__struct__: @user_model} = u | rest], assigns, out) do

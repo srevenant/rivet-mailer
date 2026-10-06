@@ -13,21 +13,19 @@ defmodule Rivet.Mailer.Tools.Email do
   def expand_emails(%{emails, __struct__: @user_model}) when is_list(emails), do: emails
 
   def expand_emails(%{__struct__: @user_model} = u),
-    do: Mailer.module_for(:user_model).preload!(u, [:emails]).emails
+    do: @user_model.preload!(u, [:emails]).emails
 
   ##############################################################################
   @doc """
   future: opts can include verfied: true (or some way to only send to verified addresses)
   """
   def get_best_email(%{__struct__: @user_model} = user) do
-    with {:ok, %{emails, __struct__: @user_model}} <-
-           Mailer.module_for(:user_model).preload(user, [:emails]),
+    with {:ok, %{emails} <- @user_model.preload(user, [:emails]),
          do: get_best_email_(emails, user)
   end
 
   def get_best_email(user_id) when is_uuid(user_id) do
-    with {:ok, %{emails, __struct__: @user_model} = user} <-
-           Mailer.module_for(:user_model).one([id: user_id], [:emails]),
+    with {:ok, %{emails} = user} <- @user_model.one([id: user_id], [:emails]),
          do: get_best_email_(emails, user)
   end
 
@@ -71,10 +69,10 @@ defmodule Rivet.Mailer.Tools.Email do
   """
 
   def direct_email_address([<<_name::binary>>, <<addr::binary>>]),
-    do: {:ok, struct(Mailer.module_for(:email_model), %{address: addr})}
+    do: {:ok, struct(@email_model, %{address: addr})}
 
   def direct_email_address(<<addr::binary>>),
-    do: {:ok, struct(Mailer.module_for(:email_model), %{address: addr})}
+    do: {:ok, struct(@email_model, %{address: addr})}
 
   # site email uses atoms; extract with that then process result
   def direct_email_address(key) when is_atom(key),
