@@ -23,7 +23,7 @@ defmodule Rivet.Mailer.Dispatch.Lib do
 
   defp pending(), do: from(s in batch_base_query(), select: s.id)
 
-  def count_pending(), do: pending() |> Mailer.module_for(:repo).aggregate(:count)
+  def count_pending(), do: pending() |> @repo.aggregate(:count)
 
   @doc """
   iex> insert(:mailer_dispatch)

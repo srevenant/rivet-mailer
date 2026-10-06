@@ -40,8 +40,5 @@ defmodule Rivet.Mailer do
 
   def module_for(name), do: Application.fetch_env!(:rivet, name)
 
-  IO.puts("""
-  [Rivet.Mailer] Ecto may report invalid association warnings for consumer-provided
-  schemas during compilation. These warnings are expected and can be ignored.
-  """)
+  IO.puts("\n[Rivet.Mailer] Ecto may report invalid association warnings for consumer-provided schemas during compilation. These warnings are expected and can be ignored.\n")
 end
