@@ -28,7 +28,7 @@ defmodule Rivet.Mailer.Template.Send do
 
   ####
   defp deliver(%Swoosh.Email{} = e, false) do
-    Logger.warning("@email_model disabled, not sending message", to: e.to, from: e.from)
+    Logger.warning("Email disabled, not sending message", to: e.to, from: e.from)
 
     headers = Enum.map(e.headers, fn {k, v} -> "#{k}: #{v}" end) |> Enum.join("\n")
 

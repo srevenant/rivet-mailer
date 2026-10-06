@@ -10,14 +10,14 @@ defmodule Rivet.Mailer.Template.Queue do
   end
 
   def mailer_queue_(t, other, assn, _opts) do
-    with {:ok, %Email{} = e} <- Tools.Email.direct_email_address(other),
+    with {:ok, %{__struct__: @email_model} = e} <- Tools.Email.direct_email_address(other),
          do: Dispatch.queue(e, t, assn)
   end
 
   ##############################################################################
-  def valid_target(%Email{status: status}, opts) do
+  def valid_target(%{__struct__: @email_model, status: status}, opts) do
     cond do
-      @email_model.sendable?(status) ->
+      Mailer.module_for(:email_model).sendable?(status) ->
         :ok
 
       Keyword.get(opts, :force) ->

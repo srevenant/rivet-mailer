@@ -45,7 +45,7 @@ defmodule Rivet.Mailer.Tools.Email do
 
   This is split out from mailer_queue_ so it is usable externally without queuing
 
-  This is only for when we don't have @email_model records such as direct
+  This is only for when we don't have email records such as direct
   mailing somebody unknown, or support/internal emails
 
   eaddr can be a [name, addr] "tuple" (but list because of configs as json),
@@ -54,22 +54,22 @@ defmodule Rivet.Mailer.Tools.Email do
   No lists of emails. Just one.
 
   iex> direct_email_address(["bob", "bob@blah.com"])
-  {:ok, %@email_model{address: "bob@blah.com"}}
+  {:ok, %Rivet.Ident.Email{address: "bob@blah.com"}}
 
   iex> direct_email_address("bob@blah.com")
-  {:ok, %@email_model{address: "bob@blah.com"}}
+  {:ok, %Rivet.Ident.Email{address: "bob@blah.com"}}
 
   iex> direct_email_address(:sales)
-  {:ok, %@email_model{address: "tardis-support@tardis.net"}}
+  {:ok, %Rivet.Ident.Email{address: "tardis-support@tardis.net"}}
 
   iex> direct_email_address(10)
   {:error, "Invalid email address"}
   """
 
   def direct_email_address([<<_name::binary>>, <<addr::binary>>]),
-    do: {:ok, struct(@email_model, %{address: addr})}
+    do: {:ok, struct(Mailer.model_for(:email_model)), %{address: addr})}
 
-  def direct_email_address(<<addr::binary>>), do: {:ok, struct(@email_model, %{address: addr})}
+  def direct_email_address(<<addr::binary>>), do: {:ok, struct(Mailer.model_for(:email_model)), %{address: addr})}
 
   # site email uses atoms; extract with that then process result
   def direct_email_address(key) when is_atom(key),
@@ -78,9 +78,9 @@ defmodule Rivet.Mailer.Tools.Email do
   def direct_email_address(_), do: {:error, "Invalid email address"}
 
   ##############################################################################
-  # defp get_email_recip!(%Target{email: %@email_model{} = e}), do: e
+  # defp get_email_recip!(%Target{email: %Rivet.Ident.Email{} = e}), do: e
   #
-  # # if we got here they either deleted the %@email_model from a %@user_model OR it is a direct
-  # # email; either way just create a mock %@email_model{} instead.
-  # defp get_email_recip!(%Target{address, email_id: nil}), do: %@email_model{address}
+  # # if we got here they either deleted the email from a user OR it is a direct
+  # # email; either way just create a mock %Rivet.Ident.Email{} instead.
+  # defp get_email_recip!(%Target{address, email_id: nil}), do: %Rivet.Ident.Email{address}
 end
