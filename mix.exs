@@ -20,6 +20,7 @@ defmodule Rivet.Mailer.MixProject do
       ],
       xref: [
         exclude:
+          # this stops the warnings about a schema not existing
           Enum.map(
             [
               :repo,

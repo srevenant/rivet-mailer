@@ -10,7 +10,7 @@ defmodule Rivet.Mailer.Sub do
     field(:class, :string)
 
     belongs_to(:origin, Mailer.Origin, type: :binary_id)
-    belongs_to(:user, Mailer.module_for(:user_model), type: :binary_id)
+    belongs_to(:user, @user_model, type: :binary_id)
 
     timestamps()
   end
