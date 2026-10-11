@@ -2,7 +2,7 @@ defmodule Rivet.Mailer.Dispatch.Log do
   use TypedEctoSchema
   use Rivet.Ecto.Model
   use Rivet.Mailer
-  import Rivet.DefEnum
+  import Rivet.Ecto.DefEnum
   import CriticalFail, only: [report_if_error: 3]
 
   defenum(Type,

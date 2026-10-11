@@ -3,7 +3,7 @@ defmodule Rivet.Mailer.Dispatch do
   use Rivet.Ecto.Model
   use Rivet.Mailer.Db
   use Rivet.Mailer
-  import Rivet.DefEnum
+  import Rivet.Ecto.DefEnum
 
   # NOTE: aborted==pre-delivery; failed==after delivery
   defenum(Status, pending: 0, dispatched: 1, aborted: 2, delivered: 3, skipped: 4, failed: 100)
@@ -13,8 +13,8 @@ defmodule Rivet.Mailer.Dispatch do
     has_many(:logs, Mailer.Dispatch.Log, foreign_key: :dispatch_id)
     # this is the "latest" of the statuses. see the log for more info on history
     field(:status, Status, default: :pending)
-    field(:template, Rivet.Utils.Ecto.Atom)
-    field(:assigns, Rivet.Utils.Ecto.AtomKeymap)
+    field(:template, Rivet.Ecto.Atom)
+    field(:assigns, Rivet.Ecto.AtomKeymap)
     field(:lock, :binary_id)
     field(:locked_at, :utc_datetime)
     field(:sender_id, :string)

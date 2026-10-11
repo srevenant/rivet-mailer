@@ -3,13 +3,13 @@ defmodule Rivet.Mailer.MixProject do
 
   @source_url "https://github.com/srevenant/rivet-ident"
   @xref_ignore_modules [
-              :repo,
-              :user_model,
-              :user_code_model,
-              :email_model,
-              :email_issue_model,
-              :handle_model
-            ]
+    :repo,
+    :user_model,
+    :user_code_model,
+    :email_model,
+    :email_issue_model,
+    :handle_model
+  ]
   def project do
     [
       app: :rivet_mailer,
@@ -70,7 +70,21 @@ defmodule Rivet.Mailer.MixProject do
     ]
   end
 
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp rivet_test_support(dep) do
+    ["..", "../../deps"]
+    |> Enum.find_value(fn prefix ->
+      path = Path.expand(Path.join([prefix, dep, "test/support"]))
+      if File.dir?(path), do: path
+    end)
+    |> case do
+      nil -> raise "Could not find test/support for #{dep}"
+      path -> path
+    end
+  end
+
+  defp elixirc_paths(:test),
+    do: ["lib", "test/support", rivet_test_support("rivet_ident")]
+
   defp elixirc_paths(_), do: ["lib"]
 
   defp deps do
@@ -86,7 +100,7 @@ defmodule Rivet.Mailer.MixProject do
       {:faker, "~> 0.18", only: [:dev, :test]},
       {:hackney, ">= 1.0.0", only: [:dev, :test]},
       {:html2markdown, "~> 0.3"},
-      {:mix_test_watch, "~> 1.0", only: [:test, :dev], runtime: false},
+      {:mix_test_watch, "~> 1.4", only: [:dev, :test], runtime: false},
       {:postgrex, "~> 0.22.4"},
       {:rivet_engram, "~> 2.0.0"},
       # {:rivet_ident, "~> 4.0.0"},
