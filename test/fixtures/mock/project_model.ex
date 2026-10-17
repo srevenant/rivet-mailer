@@ -4,7 +4,6 @@ defmodule Test.Support.Mailer.Mock.ProjectModel do
   use TypedEctoSchema
   use Rivet.Ecto.Model
   #
-  # import DefEnum
   # defenum(Visibility, private: 0, public: 1, closed: 2)
   # defenum(Status, "In Development": 0, "Pre Release": 1, Released: 2)
 

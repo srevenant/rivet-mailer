@@ -14,7 +14,7 @@ defmodule Rivet.Mailer.Template.Send do
   ##############################################################################
   @configs ["default"]
   defp build_context(%Dispatch{} = d) do
-    headers = Map.put(d.headers, "X-Codex-ID", d.id)
+    headers = Map.put(d.headers, "X-Rivet-Id", d.id)
 
     with {:ok, assigns} <- load_assign_configs(d.assigns, d.config_groups || @configs),
          do: {:ok, %{d | headers, assigns}}

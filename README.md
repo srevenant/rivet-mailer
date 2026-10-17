@@ -1,10 +1,8 @@
 # Rivet Mailer
 
 
-Validate suprssed errors
+TODO:
 
-Code.ensure_loaded!(user_model)
-Code.ensure_loaded!(email_model)
-Code.ensure_loaded!(repo)
-
-function_exported?(user_model, :__schema__, 1)
+- X-Rivet-Id -- move SES processing to watch for this first
+- simple one-click unsubscribe link and Unsubscribe: header.
+- test SES responses in mock

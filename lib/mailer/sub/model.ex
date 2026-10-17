@@ -21,4 +21,23 @@ defmodule Rivet.Mailer.Sub do
     # only for migration
     create: [:inserted_at, :updated_at],
     update: [:allow]
+
+  # todo: unsub/sub variant
+  def subscribe(user_id, origin_id, class) do
+    keys = [user_id: user_id, origin_id: origin_id, class: class]
+
+    case one(keys) do
+      {:ok, %{allow: true}} = pass ->
+        pass
+
+      {:ok, %{allow: false} = sub} ->
+        Mailer.Sub.update(sub, %{allow: true})
+
+      {:error, :not_found} ->
+        Mailer.Sub.create(Map.new(keys ++ [allow: true]))
+
+      {:error, _} = pass ->
+        pass
+    end
+  end
 end

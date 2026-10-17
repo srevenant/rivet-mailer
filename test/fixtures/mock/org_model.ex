@@ -3,7 +3,7 @@ defmodule Test.Support.Mailer.Mock.OrgModel do
   # use Core.ContextClient
   use TypedEctoSchema
   use Rivet.Ecto.Model
-  import Rivet.DefEnum
+  import Rivet.Ecto.DefEnum
 
   defenum(Status, inserted: 0, registered: 1, closed: 2)
   defenum(Type, tbd: 0, provider: 1, house: 2)

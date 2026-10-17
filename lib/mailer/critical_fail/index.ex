@@ -21,7 +21,6 @@ defmodule Rivet.Mailer.CriticalFail do
 
   def report(a, b \\ []), do: get_handler().report_(a, b)
 
-  # coveralls-ignore-start
   def report_(error, info \\ []) do
     Logger.error(error, info)
 
@@ -100,5 +99,24 @@ defmodule Rivet.Mailer.CriticalFail do
         opts ++ [trace: Exception.format(:error, error, trace)]
       )
 
-  # coveralls-ignore-stop
+  @doc """
+
+  Spin off a task and log through CriticalFail if it blows out.
+
+  """
+  def unattended_task(func), do: Task.start(fn -> run_unattended_task(func) end)
+
+  def run_unattended_task(func) do
+    func.()
+  rescue
+    err ->
+      formatted = Exception.format(:error, err, __STACKTRACE__)
+      CriticalFail.report("Unattended task crashed", error: err, traceback: formatted)
+  catch
+    err, info ->
+      # coveralls-ignore-start
+      IO.inspect({err, info}, label: "Unattended error")
+      {:traceback, {err, info}, __STACKTRACE__}
+      # coveralls-ignore-stop
+  end
 end

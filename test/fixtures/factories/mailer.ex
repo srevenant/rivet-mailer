@@ -1,5 +1,16 @@
 defmodule Test.Support.Mailer.Factories.Mailer do
-  use Test.Support.Mailer.Case.Factory
+  # use Test.Support.Mailer.Case.Factory
+  # defmacro __using__(_) do
+  #   repo = Application.compile_env!(__CALLER__, :rivet, :repo)
+  #
+  #   quote location: :keep do
+  #     use Rivet.Mailer
+  #     use ExMachina.Ecto, repo: unquote(repo)
+  #   end
+  # end
+  @repo Application.compile_env!(:rivet, :repo)
+  use ExMachina.Ecto, repo: @repo
+  use Rivet.Mailer
 
   defmacro __using__(_) do
     quote location: :keep do
