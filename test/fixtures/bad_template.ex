@@ -1,3 +1,3 @@
-defmodule Test.Support.Mailer.BadTemplate do
+defmodule Rivet.Mailer.Test.BadTemplate do
   use Rivet.Mailer.Template
 end

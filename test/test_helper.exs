@@ -1,6 +1,6 @@
 Faker.start()
 
-repo = Test.Support.Mailer.Repo
+repo = Rivet.Mailer.Test.Repo
 
 Supervisor.start_link(
   [

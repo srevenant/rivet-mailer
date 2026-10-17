@@ -1,6 +1,6 @@
-defmodule Test.Support.Mailer.Factories do
-  use Test.Support.Mailer.Case.Factory
+defmodule Rivet.Mailer.Test.Factories do
+  use Rivet.Mailer.Test.Case.Factory
 
   use Rivet.Ident.Test.IdentFactory
-  use Test.Support.Mailer.Factories.Mailer
+  use Rivet.Mailer.Test.Factories.Mailer
 end

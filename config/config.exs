@@ -13,7 +13,7 @@ config :logger, :console,
 
 config :rivet,
   app: :rivet_mailer,
-  repo: Test.Support.Mailer.Repo,
+  repo: Rivet.Mailer.Test.Repo,
   user_model: Rivet.Ident.User,
   user_code_model: Rivet.Ident.User.Code,
   email_model: Rivet.Ident.Email,
@@ -38,13 +38,13 @@ config :rivet,
 config :rivet_mailer,
   # for swoosh
   otp_app: :rivet_mailer,
-  ecto_repos: [Test.Support.Mailer.Repo],
+  ecto_repos: [Rivet.Mailer.Test.Repo],
   # test config things
   mode: :test,
   local_enrich: Test.Support.Mailer.Enrich,
   # yes this is also available in mailer_templates.critical_fail, but the
   # purposes are different so it needs to be duplicated here, for testing.
-  critical_fail: Test.Support.Mailer.Mock.CriticalFail,
+  critical_fail: Rivet.Ident.Test.NullTemplate,
   # this is separate from the email enabled flag by design, so processor can
   # run/stop and still the email subsystem can log instead of sending
   enabled: false,
@@ -57,7 +57,7 @@ config :rivet_mailer,
   # if we are falling behind, and be judicious
   workers: 1
 
-config :rivet_mailer, Test.Support.Mailer.Repo,
+config :rivet_mailer, Rivet.Mailer.Test.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10,
   username: "postgres",

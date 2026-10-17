@@ -1,16 +1,5 @@
-defmodule Test.Support.Mailer.Factories.Mailer do
-  # use Test.Support.Mailer.Case.Factory
-  # defmacro __using__(_) do
-  #   repo = Application.compile_env!(__CALLER__, :rivet, :repo)
-  #
-  #   quote location: :keep do
-  #     use Rivet.Mailer
-  #     use ExMachina.Ecto, repo: unquote(repo)
-  #   end
-  # end
-  @repo Application.compile_env!(:rivet, :repo)
-  use ExMachina.Ecto, repo: @repo
-  use Rivet.Mailer
+defmodule Rivet.Mailer.Test.Factories.Mailer do
+  use Rivet.Mailer.Test.Case.Factory
 
   defmacro __using__(_) do
     quote location: :keep do
@@ -19,7 +8,7 @@ defmodule Test.Support.Mailer.Factories.Mailer do
       def mailer_dispatch_factory do
         %Dispatch{
           target: build(:mailer_target),
-          template: Test.Support.Mailer.Mock.GoodTemplate,
+          template: Rivet.Mailer.Test.GoodTemplate,
           sender_id: Ecto.UUID.generate(),
           assigns: %{"sonic" => "screwdriver"}
         }
