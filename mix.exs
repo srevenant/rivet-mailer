@@ -36,7 +36,6 @@ defmodule Rivet.Mailer.MixProject do
       # for compiler module check warnings. It will not stop the Ecto
       # warnings.
       xref: [exclude: Enum.map(@xref_ignore_modules, &Application.get_env(:rivet, &1))],
-      # xref: [exclude: List.wrap(Application.get_env(:rivet, :repo))],
       aliases: aliases(),
       compilers: [:es6_maps | Mix.compilers()]
     ]
@@ -44,7 +43,6 @@ defmodule Rivet.Mailer.MixProject do
 
   def application do
     [
-      # mod: {Rivet.Mailer.Application, []},
       env: [rivet: [app: :rivet_mailer, base: Rivet.Mailer, models_dir: "mailer"]],
       extra_applications: [:logger]
     ]

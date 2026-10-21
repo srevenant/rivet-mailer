@@ -18,8 +18,8 @@ config :rivet,
   user_code_model: Rivet.Ident.User.Code,
   email_model: Rivet.Ident.Email,
   email_issue_model: Rivet.Ident.Email.Issue,
-  org_model: Test.Support.Mailer.Mock.OrgModel,
-  project_model: Test.Support.Mailer.Mock.ProjectModel,
+  org_model: Rivet.Mailer.Test.OrgModel,
+  project_model: Rivet.Mailer.Test.ProjectModel,
   handle_model: Rivet.Ident.Handle,
   mailer_templates: %{
     critical_fail: Rivet.Mailer.CriticalFail
@@ -41,12 +41,13 @@ config :rivet_mailer,
   ecto_repos: [Rivet.Mailer.Test.Repo],
   # test config things
   mode: :test,
-  local_enrich: Test.Support.Mailer.Enrich,
+  local_enrich: Rivet.Mailer.Test.Enrich,
   # yes this is also available in mailer_templates.critical_fail, but the
   # purposes are different so it needs to be duplicated here, for testing.
   critical_fail: Rivet.Ident.Test.NullTemplate,
   # this is separate from the email enabled flag by design, so processor can
   # run/stop and still the email subsystem can log instead of sending
+  password_history: 6,
   enabled: false,
   batch_size: 5_000,
   batch_interval_pending: [10, 100],

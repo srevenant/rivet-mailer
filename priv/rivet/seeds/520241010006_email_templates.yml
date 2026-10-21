@@ -23,7 +23,7 @@ values:
 type: Rivet.Mailer.Template
 values:
   id: 20fb335d-2e70-4203-b7de-3c28fd806a5c
-  name: Elixir.Test.Support.Mailer.FunctionalTemplate
+  name: Elixir.Rivet.Mailer.Test.FunctionalTemplate
   data: |-
     === rivet-engram-v1
     sections:
