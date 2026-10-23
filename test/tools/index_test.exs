@@ -39,7 +39,7 @@ defmodule Rivet.Mailer.Test.Tools.IndexTest do
     ======
 
     more
-    
+
     with
 
     * list

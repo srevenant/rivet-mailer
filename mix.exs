@@ -78,6 +78,8 @@ defmodule Rivet.Mailer.MixProject do
       {:rivet_engram, "~> 2.0.0"},
       # {:rivet_ident, "~> 4.0.0"},
       {:rivet_ident, git: "https://github.com/srevenant/rivet-ident/", branch: "mailer-updates"},
+      {:rivet_utils,
+       git: "https://github.com/srevenant/rivet-utils/", branch: "v3", override: true},
       {:swoosh, "~> 1.19"}
       # {:typed_ecto_schema, "~> 0.3.0 or ~> 0.4.1"}
 

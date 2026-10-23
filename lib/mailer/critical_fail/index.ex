@@ -8,6 +8,7 @@ defmodule Rivet.Mailer.CriticalFail do
 
   use Rivet.Mailer.Template
   use Rivet.Mailer
+  import Rivet.Utils.Map, only: [to_string_keqv: 1]
   import Rivet.Utils.UniformLogFormat, only: [format_msg: 2]
 
   # gymnastics for test, only set this in test config
@@ -22,22 +23,26 @@ defmodule Rivet.Mailer.CriticalFail do
   def report(a, b \\ []), do: get_handler().report_(a, b)
 
   def report_(error, info \\ []) do
-    Logger.error(error, info)
+    log = nice_error(error)
+    Logger.error(log, info)
 
     # Task so we split out of any transaction that is being aborted, because
     # deliver still makes a db call and thus fails if we are in an aborting transaction
-    Task.start(fn -> deliver_now(:errors, %{log: error, info: format_msg([], info)}) end)
+    Task.start(fn -> deliver_now(:errors, %{log, info: format_msg([], info)}) end)
 
-    {:error, error}
+    {:error, log}
   end
 
   # this forces opts into the email message itself. beware
-  def dangerous_report_with_opts(log, info) do
+  def dangerous_report_with_opts(error, info) do
+    log = nice_error(error)
     Logger.error(log, info)
 
-    Task.start(fn -> deliver_now(:errors, %{log: "#{log} #{kv_string(info)}", info: ""}) end)
+    Task.start(fn ->
+      deliver_now(:errors, %{log: "#{log}: #{to_string_keqv(info)}", info: ""})
+    end)
 
-    {:error, log}
+    {:error, error}
   end
 
   ##############################################################################
@@ -53,24 +58,18 @@ defmodule Rivet.Mailer.CriticalFail do
   end
 
   ##############################################################################
-
-  # need to update this in Rivet.Utils so it's more accessible
-  defp kv_string(data),
-    do: Rivet.Utils.UniformLogFormat.format_msg(data, %{}) |> IO.iodata_to_binary()
-
-  #######
   def report_if_error(a, b \\ nil, c \\ [])
 
   def report_if_error({:error, msg}, nil, info), do: report(nice_error(msg), info)
 
-  def report_if_error({:error, m2}, msg, info) do
+  def report_if_error({:error, m2} = pass, msg, info) do
     report("#{msg}: #{nice_error(m2)}", info)
-    {:error, m2}
+    pass
   end
 
-  def report_if_error({:error, m2, _}, msg, info) do
+  def report_if_error({:error, m2, _} = pass, msg, info) do
     report("#{msg}: #{nice_error(m2)}", info)
-    {:error, m2}
+    pass
   end
 
   def report_if_error(pass, _, _), do: pass
