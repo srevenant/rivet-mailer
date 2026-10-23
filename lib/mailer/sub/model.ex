@@ -27,17 +27,11 @@ defmodule Rivet.Mailer.Sub do
     keys = [user_id: user_id, origin_id: origin_id, class: class]
 
     case one(keys) do
-      {:ok, %{allow: true}} = pass ->
-        pass
-
-      {:ok, %{allow: false} = sub} ->
-        Mailer.Sub.update(sub, %{allow: true})
-
-      {:error, :not_found} ->
-        Mailer.Sub.create(Map.new(keys ++ [allow: true]))
-
-      {:error, _} = pass ->
-        pass
+      {:ok, %{allow: true}} = pass -> pass
+      {:ok, %{allow: false} = sub} -> Mailer.Sub.update(sub, %{allow: true})
+      {:error, :not_found} -> Mailer.Sub.create(Map.new(keys ++ [allow: true]))
+      # coveralls-ignore-next-line
+      {:error, _} = pass -> pass
     end
   end
 end

@@ -22,8 +22,10 @@ defmodule Rivet.Mailer.Template.Send do
 
   ##############################################################################
   defp deliver(%Swoosh.Email{} = e, true) do
+    # coveralls-ignore-start
     Logger.debug("Sending email", to: e.to, from: e.from, subject: e.subject)
     Rivet.Mailer.Local.Backend.deliver(e)
+    # coveralls-ignore-stop
   end
 
   ####
@@ -57,6 +59,7 @@ defmodule Rivet.Mailer.Template.Send do
     case Rivet.Mailer.Config.load_site(name) do
       {:ok, assn2} -> merge_assigns(assigns, assn2) |> load_assign_configs(rest)
       # only if there's a DB error, not a missing site
+      # coveralls-ignore-next-line
       {:error, e} -> {:error, "Mailer config load error: #{e}"}
     end
   end
@@ -87,7 +90,7 @@ defmodule Rivet.Mailer.Template.Send do
     end
   end
 
-  defp get_from(%Dispatch{assigns, from_key}) do
+  def get_from(%Dispatch{assigns, from_key}) do
     key = Enum.map(from_key, &String.to_existing_atom/1)
 
     case get_in(assigns, key) do

@@ -21,12 +21,12 @@ defmodule Rivet.Mailer.Template.Queue do
         :ok
 
       Keyword.get(opts, :force) ->
+        msg = "Overriding and sending to email address in status=#{status}"
+        Logger.error(msg)
         :ok
 
       true ->
-        msg = "Overriding and sending to email address in status=#{status}"
-        Logger.error(msg)
-        {:error, msg}
+        {:error, "Address is not eligible for receiving email (status=#{status})"}
     end
   end
 

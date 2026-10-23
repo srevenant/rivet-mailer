@@ -73,7 +73,7 @@ defmodule Rivet.Mailer.MixProject do
       {:excoveralls, "~> 0.14", only: :test},
       {:faker, "~> 0.18", only: [:dev, :test]},
       {:hackney, ">= 1.0.0", only: [:dev, :test]},
-      {:html2markdown, "~> 0.3"},
+      {:markdownify_ex, "~> 1.2"},
       {:mix_test_watch, "~> 1.4", only: [:dev, :test], runtime: false},
       {:rivet_engram, "~> 2.0.0"},
       # {:rivet_ident, "~> 4.0.0"},

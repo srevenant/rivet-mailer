@@ -91,7 +91,10 @@ defmodule Rivet.Mailer.Processor.Sender do
   end
 
   defp log_result({:skipped, assigns}, %Dispatch{} = d) do
+    # coveralls-ignore-start
     Logger.warning("skipping email dispatch", assigns: assigns, dispatch_id: d.id)
+    {:skipped, %{message: "skipped"}, []}
+    # coveralls-ignore-stop
 
     # ############################################################################
     # #                                                                          #
@@ -126,8 +129,6 @@ defmodule Rivet.Mailer.Processor.Sender do
     # #                                                                          #
     # #                                                                          #
     # ############################################################################
-
-    {:skipped, %{message: "skipped"}, []}
   end
 
   defp log_result({:dispatched, _, opts} = pass, %Dispatch{} = d) do

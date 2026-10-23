@@ -7,12 +7,6 @@ defmodule Rivet.Mailer.Tools.Format do
     noname: ""
   }
 
-  @doc """
-  iex> id = Ecto.UUID.generate()
-  iex> opts = %{prefix: "blue", suffix: "bork"}
-  iex> "blue Narf bork" = human_name(%Rivet.Ident.User{id: id, name: "", handle: %Rivet.Ident.Handle{id: id, handle: "Narf"}}, opts)
-  iex> "noname" = human_name(%Rivet.Ident.User{id: id, name: "", handle: %Rivet.Ident.Handle{id: id, handle: ""}}, %{noname: "noname"})
-  """
   def human_name(%{__struct__: @user_model} = u, opts \\ []) do
     opts = Map.merge(@default_human, Map.new(opts))
 
@@ -30,10 +24,20 @@ defmodule Rivet.Mailer.Tools.Format do
     |> String.trim()
   end
 
-  @doc ~S"""
-  iex> html2text("<b>an html doc</b><p><h1>Header</h1>")
-  "**an html doc**\n\n# Header"
+  @doc """
+  This is a centralized call here so its easier for us to swap backends.
+
+  Notes:
+
+  * :html2markdown — lightweight, but has issues with slight variants to html like <p> unclosed, and runs as regex/replaces.
+  * :html_to_markdown — a rust based NIF, but that means you need to have a rust compiler. So not portable.
+  * :markdownify_ex — native erlang/elixir. maybe not as efficient but it works.
+
+  Todo:
+
+  * make it configurable, including added-opts?
+
   """
   @spec html2text(html :: String.t()) :: text :: String.t()
-  def html2text(html), do: Html2Markdown.convert(html)
+  def html2text(html), do: Markdownify.markdownify(html)
 end

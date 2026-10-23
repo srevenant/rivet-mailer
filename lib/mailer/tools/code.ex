@@ -4,9 +4,8 @@ defmodule Rivet.Mailer.Tools.Code do
   def enrich_with_code(user_id, type, meta \\ %{}) do
     lib = Module.concat([@user_code_model, "Lib"])
 
-    with {:ok, code} <- lib.reset_generate(user_id, type, meta) do
-      {:ok, Map.put(meta, :code_id, code.id)}
-    end
+    with {:ok, code} <- lib.reset_generate(user_id, type, meta),
+         do: {:ok, Map.put(meta, :code_id, code.id)}
   end
 
   def code_enrich_assigns(%Dispatch{target, assigns: %{code_id} = assigns} = d) do

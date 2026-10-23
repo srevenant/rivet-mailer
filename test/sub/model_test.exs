@@ -10,4 +10,12 @@ defmodule Rivet.Mailer.Test.Sub.ModelTest do
     assert {:ok, %Sub{} = d} = Sub.create(params)
     assert {:ok, _} = Sub.delete(d)
   end
+
+  test "subscribe" do
+    %{origin, class, user, allow: false} = insert(:mailer_sub, allow: false)
+
+    assert {:ok, %{allow: true}} = Sub.subscribe(user.id, origin.id, class)
+    assert {:ok, %{allow: true}} = Sub.subscribe(user.id, origin.id, "narf")
+    assert {:ok, %{allow: true}} = Sub.subscribe(user.id, origin.id, "narf")
+  end
 end

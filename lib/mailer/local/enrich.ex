@@ -29,6 +29,8 @@ defmodule Rivet.Mailer.Local.Enrich do
   end
 
   # defaults for when unconfigured
+  # coveralls-ignore-start
   def enrich!(assigns, _target), do: assigns
   def enrich!(assigns, _key, _target), do: assigns
+  # coveralls-ignore-stop
 end

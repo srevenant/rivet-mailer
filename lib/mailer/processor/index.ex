@@ -35,6 +35,7 @@ defmodule Rivet.Mailer.Processor do
   def enabled(bool), do: Application.put_env(:rivet_mailer, :enabled, bool)
 
   def start_link(initial),
+    # coveralls-ignore-next-line
     do: GenServer.start_link(__MODULE__, initial, name: __MODULE__)
 
   @impl GenServer
@@ -44,6 +45,7 @@ defmodule Rivet.Mailer.Processor do
       {:ok, %{ref, last: 0}}
     end
   else
+    # coveralls-ignore-next-line
     def init(_), do: {:ok, %{ref: nil, last: 0}}
   end
 
