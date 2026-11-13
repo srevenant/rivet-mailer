@@ -1,9 +1,10 @@
 defmodule Rivet.Mailer.Test.Fixtures.MailerFactories do
+      use Rivet.Mailer
   defmacro __using__(_) do
     quote location: :keep do
       import Ecto.Query
-      alias Rivet.Mailer
-      alias Rivet.Mailer.{Processor, Dispatch, Target, Tools}
+      # alias Rivet.Mailer
+      # alias Rivet.Mailer.{Processor, Dispatch, Target, Tools}
 
       def mailer_dispatch_factory do
         %Dispatch{
@@ -62,11 +63,11 @@ defmodule Rivet.Mailer.Test.Fixtures.MailerFactories do
         insert(:mailer_dispatch, Keyword.merge(opts, merge))
       end
 
-      defp shift_user_inserted_at(%User{inserted_at: t, id: u_id} = u, minutes \\ -1440) do
+      defp shift_user_inserted_at(%@user_model{inserted_at: t, id: u_id} = u, minutes \\ -1440) do
         t = DateTime.shift(t, minute: minutes)
 
-        from(u in User, as: :u, where: u.id == ^u_id)
-        |> User.update_all(set: [inserted_at: t, updated_at: t])
+        from(u in @user_model, as: :u, where: u.id == ^u_id)
+        |> @repo.update_all(set: [inserted_at: t, updated_at: t])
         |> case do
           {1, _} -> %{u | inserted_at: t, updated_at: t}
         end
