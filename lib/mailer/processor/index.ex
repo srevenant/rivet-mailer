@@ -86,16 +86,13 @@ defmodule Rivet.Mailer.Processor do
       state
       # coveralls-ignore-stop
     end
-    |> monitor_queue_size(DispatchLib.count_pending())
-    |> requeue_next()
+    |> requeue_next(DispatchLib.count_pending())
   end
-
-  defp monitor_queue_size(state, x), do: {state, x}
 
   ##############################################################################
   # This waits a bit based on if there's anything pending (:batch_interval_pending)
   # or if nothing is pending it backs off to the max (:batch_interval_none)
-  defp requeue_next({%{last: x} = state, pending}) do
+  defp requeue_next(%{last: x} = state, pending) do
     interval =
       if pending > 0 do
         # bobbling with multiple pending calls eh. We already run bobble wait

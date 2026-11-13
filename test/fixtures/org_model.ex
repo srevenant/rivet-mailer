@@ -1,4 +1,4 @@
-defmodule Rivet.Mailer.Test.OrgModel do
+defmodule Rivet.Mailer.Test.Fixtures.OrgModel do
   # import Ecto.Changeset
   # use Core.ContextClient
   use TypedEctoSchema

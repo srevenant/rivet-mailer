@@ -19,13 +19,13 @@ defmodule Rivet.Mailer.Test.CriticalFail.IndexTest do
       end
 
     assert capture_log(fn ->
-      assert {:error, "Stacktrace in Tester: kaboom"} =
-               CriticalFail.stacktrace("Tester", error, trace, dispatch_id: "abc")
-    end) =~ ~r/Stacktrace in Tester: kaboom/
+             assert {:error, "Stacktrace in Tester: kaboom"} =
+                      CriticalFail.stacktrace("Tester", error, trace, dispatch_id: "abc")
+           end) =~ ~r/Stacktrace in Tester: kaboom/
   end
 
   test "run_unattended_task catches properly" do
-    Rivet.Ident.Test.NullTemplate.listen()
+    Rivet.Ident.Test.Fixtures.NullTemplate.listen()
 
     assert capture_log(fn ->
              assert {:error, "Unattended task crashed"} =

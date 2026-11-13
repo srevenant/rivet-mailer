@@ -5,7 +5,7 @@ defmodule Rivet.Mailer.Test.Template.IndexTest do
 
   doctest Mailer.Template, import: true
 
-  alias Rivet.Mailer.Test.FunctionalTemplate
+  alias Rivet.Mailer.Test.Fixtures.FunctionalTemplate
 
   test "FunctionalTemplate" do
     %{user} = insert(:ident_handle)

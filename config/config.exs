@@ -18,19 +18,20 @@ config :rivet,
   user_code_model: Rivet.Ident.User.Code,
   email_model: Rivet.Ident.Email,
   email_issue_model: Rivet.Ident.Email.Issue,
-  org_model: Rivet.Mailer.Test.OrgModel,
-  project_model: Rivet.Mailer.Test.ProjectModel,
+  org_model: Rivet.Mailer.Test.Fixtures.OrgModel,
+  project_model: Rivet.Mailer.Test.Fixtures.ProjectModel,
   handle_model: Rivet.Ident.Handle,
   mailer_templates: %{
     critical_fail: Rivet.Mailer.CriticalFail
   }
 
-#   system_error: Rivet.Ident.Test.NullTemplate,
-#   password_changed: Rivet.Ident.Test.NullTemplate,
-#   password_reset: Rivet.Ident.Test.NullTemplate,
-#   user_failed_change: Rivet.Ident.Test.NullTemplate,
-#   user_verification: Rivet.Ident.Test.NullTemplate
-# }
+config :rivet_ident,
+  defenums: [
+    {Rivet.Ident.Access.Domains, global: 0},
+    {Rivet.Ident.Email.Status, pending: 0, verified: 1, bouncing: 2, complaint: 3, rejected: 4},
+    {Rivet.Ident.User.Code.Types, password_reset: 0, email_verify: 1, delete_request: 3},
+    {Rivet.Ident.User.Data.Types, address: 2, profile: 4, toggles: 5, save: 6, social: 20}
+  ]
 
 # app: :rivet_ident,
 # test: true
@@ -44,7 +45,7 @@ config :rivet_mailer,
   local_enrich: Rivet.Mailer.Test.Enrich,
   # yes this is also available in mailer_templates.critical_fail, but the
   # purposes are different so it needs to be duplicated here, for testing.
-  critical_fail: Rivet.Ident.Test.NullTemplate,
+  critical_fail: Rivet.Ident.Test.Fixtures.NullTemplate,
   # this is separate from the email enabled flag by design, so processor can
   # run/stop and still the email subsystem can log instead of sending
   password_history: 6,

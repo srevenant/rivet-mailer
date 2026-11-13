@@ -1,14 +1,14 @@
-defmodule Rivet.Mailer.Test.Factories.Mailer do
-  use Rivet.Mailer.Test.Case.Factory
-
+defmodule Rivet.Mailer.Test.Fixtures.MailerFactories do
   defmacro __using__(_) do
     quote location: :keep do
       import Ecto.Query
+      alias Rivet.Mailer
+      alias Rivet.Mailer.{Processor, Dispatch, Target, Tools}
 
       def mailer_dispatch_factory do
         %Dispatch{
           target: build(:mailer_target),
-          template: Rivet.Mailer.Test.GoodTemplate,
+          template: Rivet.Mailer.Test.Fixtures.GoodTemplate,
           sender_id: Ecto.UUID.generate(),
           assigns: %{"sonic" => "screwdriver"}
         }

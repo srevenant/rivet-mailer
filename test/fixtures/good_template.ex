@@ -1,4 +1,4 @@
-defmodule Rivet.Mailer.Test.GoodTemplate do
+defmodule Rivet.Mailer.Test.Fixtures.GoodTemplate do
   use Rivet.Mailer
   import Ecto.Query
 

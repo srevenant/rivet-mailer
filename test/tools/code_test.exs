@@ -19,7 +19,7 @@ defmodule Rivet.Mailer.Test.Tools.CodeTest do
 
   test "various" do
     d = %{target: %{user}} = insert(:mailer_dispatch)
-    assert {:ok, %{code_id}} = Code.enrich_with_code(user.id, :password)
+    assert {:ok, %{code_id}} = Code.enrich_with_code(user.id, :password_reset)
     assert code_id > 0
 
     assert {:ok, %{assigns: %{code}}} =
