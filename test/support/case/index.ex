@@ -49,7 +49,7 @@ defmodule Rivet.Mailer.Test.Case do
       ##########################################################################
       # bypass needed because DB connection privs don't work right when in tests
       # and it is in the subprocess
-      def expect_bypass(a, b, c)
+      # def expect_bypass(a, b, c)
 
       # def expect_bypass(mod, [[_, target], assigns], expected) when not_empty_str(target),
       #   do: expect_bypass_(mod, [target, assigns], expected)

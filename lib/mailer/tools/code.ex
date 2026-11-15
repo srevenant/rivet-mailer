@@ -25,7 +25,6 @@ defmodule Rivet.Mailer.Tools.Code do
                  nfactors: length(user.factors)
                })
                |> Rivet.Mailer.enrich!(:recip, user)
-               |> Rivet.Mailer.enrich!(user)
          }}
       end
     end
