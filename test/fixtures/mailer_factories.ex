@@ -1,5 +1,6 @@
 defmodule Rivet.Mailer.Test.Fixtures.MailerFactories do
-      use Rivet.Mailer
+  use Rivet.Mailer
+
   defmacro __using__(_) do
     quote location: :keep do
       import Ecto.Query

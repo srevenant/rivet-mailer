@@ -31,6 +31,7 @@ defmodule Rivet.Mailer.Dispatch.Log do
   use Rivet.Ecto.Collection,
     not_found: :atom,
     required: [:dispatch_id, :type],
+    foreign_keys: [:issue_id, :dispatch_id],
     # should be one of these two but typically not both
     create: [:issue_id, :value],
     update: []

@@ -17,5 +17,5 @@
       [include: "user/ext_id", prefix: 210]
     ]
   ],
-  [include: "mailer", prefix: 1000]
+  [include: "mailer", prefix: 250]
 ]
