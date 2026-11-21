@@ -8,7 +8,7 @@ defmodule Rivet.Mailer.Template.Send do
          {:ok, %Dispatch{} = d} <- build_context(d),
          {:ok, %Dispatch{} = d} <- Mailer.Template.Eval.generate(d),
          {:ok, %Swoosh.Email{} = e} <- build_email(d),
-         do: deliver(e, Application.get_env(:rivet_mailer, :enabled))
+         do: deliver(e, Application.get_env(:rivet_mailer, :mode))
   end
 
   ##############################################################################
@@ -21,16 +21,8 @@ defmodule Rivet.Mailer.Template.Send do
   end
 
   ##############################################################################
-  defp deliver(%Swoosh.Email{} = e, true) do
-    # coveralls-ignore-start
-    Logger.debug("Sending email", to: e.to, from: e.from, subject: e.subject)
-    Rivet.Mailer.Local.Backend.deliver(e)
-    # coveralls-ignore-stop
-  end
-
-  ####
-  defp deliver(%Swoosh.Email{} = e, false) do
-    Logger.warning("Email disabled, not sending message", to: e.to, from: e.from)
+  defp deliver(%Swoosh.Email{} = e, :test) do
+    Logger.warning("rivet_mailer.mode=test; not sending message", to: e.to, from: e.from)
 
     headers = Enum.map(e.headers, fn {k, v} -> "#{k}: #{v}" end) |> Enum.join("\n")
 
@@ -52,6 +44,14 @@ defmodule Rivet.Mailer.Template.Send do
 
     # simulate AWS SES
     {:ok, %{request_id: "email disabled", id: Ecto.UUID.generate()}}
+  end
+
+  ####
+  defp deliver(%Swoosh.Email{} = e, _) do
+    # coveralls-ignore-start
+    Logger.debug("Sending email", to: e.to, from: e.from, subject: e.subject)
+    Rivet.Mailer.Local.Backend.deliver(e)
+    # coveralls-ignore-stop
   end
 
   ##############################################################################
