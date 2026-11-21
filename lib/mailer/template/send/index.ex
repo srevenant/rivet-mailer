@@ -21,8 +21,8 @@ defmodule Rivet.Mailer.Template.Send do
   end
 
   ##############################################################################
-  defp deliver(%Swoosh.Email{} = e, :test) do
-    Logger.warning("rivet_mailer.mode=test; not sending message", to: e.to, from: e.from)
+  defp deliver(%Swoosh.Email{} = e, :dev) do
+    Logger.warning("rivet_mailer.mode=dev; not sending message", to: e.to, from: e.from)
 
     headers = Enum.map(e.headers, fn {k, v} -> "#{k}: #{v}" end) |> Enum.join("\n")
 
