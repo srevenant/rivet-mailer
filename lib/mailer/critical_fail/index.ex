@@ -91,12 +91,12 @@ defmodule Rivet.Mailer.CriticalFail do
   def nice_error(hrm), do: inspect(hrm)
 
   ######
-  def stacktrace(origin, error, trace, opts \\ []),
-    do:
-      report(
-        "Stacktrace in #{origin}: #{Exception.message(error)}",
-        opts ++ [trace: Exception.format(:error, error, trace)]
-      )
+  def stacktrace(origin, error, trace, opts \\ []) do
+    report(
+      "Stacktrace in #{origin}: #{Exception.message(error)}",
+      opts ++ [trace: Exception.format(:error, error, trace)]
+    )
+  end
 
   @doc """
 
