@@ -22,6 +22,8 @@ defmodule Rivet.Mailer.CriticalFail do
 
   def report(a, b \\ []), do: get_handler().report_(a, b)
 
+  ##############################################################################
+  # coveralls-ignore-start
   def report_(error, info \\ []) do
     log = nice_error(error)
     Logger.error(log, info)
@@ -32,8 +34,11 @@ defmodule Rivet.Mailer.CriticalFail do
 
     {:error, log}
   end
+  # coveralls-ignore-stop
 
+  ##############################################################################
   # this forces opts into the email message itself. beware
+  # coveralls-ignore-start
   def dangerous_report_with_opts(error, info) do
     log = nice_error(error)
     Logger.error(log, info)
@@ -44,17 +49,30 @@ defmodule Rivet.Mailer.CriticalFail do
 
     {:error, error}
   end
+  # coveralls-ignore-stop
 
   ##############################################################################
+  # coveralls-ignore-start
   def deliver_now(email_key, assigns) when is_atom(email_key) do
     with {:ok, %Dispatch{} = d} <- create_dispatch(email_key, assigns),
          do: Mailer.Processor.Sender.send(d)
   end
+  # coveralls-ignore-stop
 
   def create_dispatch(email_key, assigns) do
+    opts = [force: true, lock: Ecto.UUID.generate(), locked_at: DateTime.utc_now()]
+
     with {:ok, recip} <- Mailer.Tools.Email.direct_email_address(email_key),
-         {:error, r} <- mailer_queue(recip, assigns, force: true),
-         do: Logger.error("Failed to create CriticalFail dispatch", reason: r)
+         {:ok, d} <- mailer_queue(recip, assigns, opts),
+         {:ok, d} <- Dispatch.preload(d, target: [:email, :user]) do
+      {:ok, d}
+    else
+      {:error, reason} = error ->
+        # coveralls-ignore-start
+        Logger.error("Failed to create CriticalFail dispatch", reason: reason)
+        error
+        # coveralls-ignore-stop
+    end
   end
 
   ##############################################################################
@@ -103,6 +121,7 @@ defmodule Rivet.Mailer.CriticalFail do
   Spin off a task and log through CriticalFail if it blows out.
 
   """
+  # coveralls-ignore-next-line
   def unattended_task(func), do: Task.start(fn -> run_unattended_task(func) end)
 
   def run_unattended_task(func) do

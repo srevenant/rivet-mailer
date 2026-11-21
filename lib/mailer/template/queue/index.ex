@@ -2,17 +2,22 @@ defmodule Rivet.Mailer.Template.Queue do
   use Rivet.Mailer
 
   def mailer_queue_(t, %{__struct__: @email_model} = e, assn, opts) do
-    with :ok <- valid_target(e, opts), do: Dispatch.queue(e, t, assn)
+    attrs = attrs_from_opts(opts)
+    with :ok <- valid_target(e, opts), do: Dispatch.queue(e, t, assn, attrs)
   end
 
   def mailer_queue_(t, %{__struct__: @user_model} = u, assn, opts) do
     with {:ok, e} <- Tools.Email.get_best_email(u), do: mailer_queue_(t, e, assn, opts)
   end
 
-  def mailer_queue_(t, other, assn, _opts) do
+  def mailer_queue_(t, other, assn, opts) do
+    attrs = attrs_from_opts(opts)
+
     with {:ok, %{__struct__: @email_model} = e} <- Tools.Email.direct_email_address(other),
-         do: Dispatch.queue(e, t, assn)
+         do: Dispatch.queue(e, t, assn, attrs)
   end
+
+  defp attrs_from_opts(opts), do: Map.new(opts) |> Map.delete(:force)
 
   ##############################################################################
   def valid_target(%{__struct__: @email_model, status: status}, opts) do

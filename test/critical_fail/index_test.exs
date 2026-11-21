@@ -7,7 +7,20 @@ defmodule Rivet.Mailer.Test.CriticalFail.IndexTest do
     assert capture_log(fn ->
              assert {:error, "msg", 2} = CriticalFail.report_if_error({:error, "msg", 2})
              assert {:error, _} = CriticalFail.report_if_error({:error, 1})
+             assert {:ok, :fine} = CriticalFail.report_if_error({:ok, :fine})
+             assert :ok = CriticalFail.report_if_error(:ok)
            end) =~ ~r/msg/
+  end
+
+  test "nice_error formats different error types" do
+    assert CriticalFail.nice_error("oops") == "oops"
+    assert CriticalFail.nice_error(:oops) == ":oops"
+
+    changeset = %Ecto.Changeset{
+      errors: [email: {"must have %{count} characters", [count: 5]}]
+    }
+
+    assert CriticalFail.nice_error(changeset) == "email must have 5 characters"
   end
 
   test "stacktrace formats and reports exception" do

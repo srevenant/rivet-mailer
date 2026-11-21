@@ -12,4 +12,11 @@ defmodule Rivet.Mailer.Test.Dispatch.ModelTest do
     assert {:ok, %Dispatch{} = d} = Dispatch.create(params)
     assert {:ok, _} = Dispatch.delete(d)
   end
+
+  test "coverage for default for queue/4" do
+    e = insert(:ident_email)
+    lock = Ecto.UUID.generate()
+    assert {:ok, %{lock: ^lock}} = Dispatch.queue(e, CriticalFail, %{}, %{lock})
+    assert {:ok, %{lock: nil}} = Dispatch.queue(e, CriticalFail, %{})
+  end
 end

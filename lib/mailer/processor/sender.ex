@@ -62,18 +62,26 @@ defmodule Rivet.Mailer.Processor.Sender do
   def normalize_result({:error, %{code, message}, moar}),
     do: {:aborted, "#{code}: #{message}", moar}
 
-  # {:error, :closed, []} !?? - this is probably needing to be fixed in Rivet.Mailer.Template
   # fallback
   def normalize_result(other) do
     # Shutdown if something weird happens
     Mailer.enabled(false)
-    CriticalFail.report("MAILER DISABLED due to unexpected result")
+    Logger.error("MAILER DISABLED due to unexpected result", response: other)
     {:aborted, "Mailer DISABLED: unexpected result shape", response: other}
   end
 
   ##############################################################################
-  # slight sugar to make lines shorter
-  def aborted(msg, d, opts),
+  # don't let CriticalFail cascade
+  def aborted(msg, %Dispatch{template: CriticalFail} = d, opts) do
+    Logger.error(
+      "Mailer abort: #{msg} (CriticalFail notification)",
+      opts ++ [dispatch_id: d.id]
+    )
+
+    {:error, msg}
+  end
+
+  def aborted(msg, %Dispatch{} = d, opts),
     do: CriticalFail.report("Mailer abort: #{msg}", opts ++ [dispatch_id: d.id])
 
   ##############################################################################

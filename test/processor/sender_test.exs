@@ -24,6 +24,8 @@ defmodule Rivet.Mailer.Test.Processor.SenderTest do
   end
 
   test "Template error aborts dispatch" do
+    Rivet.Ident.Test.Fixtures.NullTemplate.listen()
+
     d = good_dispatch(%{error: "other"})
 
     assert capture_log(fn -> assert {:ok, _} = Sender.send(d) end) =~
@@ -32,6 +34,10 @@ defmodule Rivet.Mailer.Test.Processor.SenderTest do
     assert {:ok, %{status: :aborted, lock: nil, sent_at: nil}} = Dispatch.one(id: d.id)
 
     assert {:ok, %{type: :aborted}} = Dispatch.Log.one(dispatch_id: d.id, type: :aborted)
+
+    assert_receive {:report_, {message, opts}}
+    assert message =~ "Mailer abort: error sending email"
+    assert opts[:dispatch_id] == d.id
   end
 
   test "Template exception aborts dispatch" do
@@ -65,5 +71,29 @@ defmodule Rivet.Mailer.Test.Processor.SenderTest do
            end) =~ ~r/DISABLED due to unexpected result/
 
     assert {:aborted, "wat", []} = Sender.normalize_result({:error, :wat, []})
+  end
+
+  test "CriticalFail abort does not trigger another report" do
+    Rivet.Ident.Test.Fixtures.NullTemplate.listen()
+
+    d =
+      insert(:mailer_dispatch, target: insert_good_target(), template: CriticalFail)
+      |> Ecto.reset_fields([:target])
+
+    assert capture_log(fn ->
+             assert {:ok, %Dispatch{status: :aborted}} = Mailer.Processor.Sender.send(d)
+           end) =~ "Mailer abort: error sending email (CriticalFail notification)"
+
+    refute_receive {:report_, _}, 50
+
+    assert {:ok, %Dispatch{status: :aborted}} = Dispatch.one(d.id)
+  end
+
+  test "create_dispatch preloads and locks CriticalFail" do
+    assert {:ok, %Dispatch{target: %Target{}, lock: lock, locked_at: %DateTime{}} = d} =
+             CriticalFail.create_dispatch(:errors, %{log: "test", info: []})
+
+    assert is_binary(lock)
+    assert {:ok, %Dispatch{lock: ^lock}} = Dispatch.one(d.id)
   end
 end

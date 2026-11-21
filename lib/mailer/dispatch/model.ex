@@ -36,10 +36,10 @@ defmodule Rivet.Mailer.Dispatch do
     update: [:sent_at, :status, :assigns, :lock, :locked_at, :sender_id],
     foreign_keys: [:target_id]
 
-  def queue(%{__struct__: @email_model, address: address} = e, template, assigns)
+  def queue(%{__struct__: @email_model, address: address} = e, template, assigns, attrs \\ %{})
       when not_empty_str(address) do
     with {:ok, target_id} <- Mailer.Target.upsert_email(e),
-         do: create(%{template, assigns, target_id, status: :pending})
+         do: create(Map.merge(attrs, %{template, assigns, target_id, status: :pending}))
   end
 
   def get_by_sender_id(id) when not_empty_str(id) do
