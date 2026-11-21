@@ -16,9 +16,9 @@ defmodule Rivet.Mailer.Tools.Email do
     do: @user_model.preload!(u, [:emails]).emails
 
   ##############################################################################
-  def load_user_email!(user_id) when is_uuid(user_id) do
-    with {:ok, %User{} = u} <- do: User.one!([id: user_id], [:emails, :handle]),
-     do: get_best_email(u)
+  def load_user_email(user_id) when is_uuid(user_id) do
+    with {:ok, u} <- @user_model.one([id: user_id], [:emails, :handle]),
+         do: get_best_email(u)
   end
 
   ##############################################################################
