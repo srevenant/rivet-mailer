@@ -43,7 +43,7 @@ defmodule Rivet.Mailer.Dispatch.Log do
         message: "only one of issue_id or value allowed"
       )
 
-  def add(:ses, status, ref_id, %{type, log}) do
+  def add(:ses, status, {_, _} = ref_id, %{type, log}) do
     with {:ok, %Dispatch{id, target: %Target{} = t} = s} <- Dispatch.lookup(ref_id) do
       Dispatch.update(s, %{status})
       |> report_if_error("Unable to update Mailer.Dispatch", status: status)

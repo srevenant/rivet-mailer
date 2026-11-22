@@ -13,13 +13,13 @@ defmodule Rivet.Mailer.Test.Dispatch.LogTest do
   end
 
   test "add" do
-    assert {:error, :not_found} = Log.add(:ses, :bad, "noid", %{type: "x", log: "y"})
+    assert {:error, :not_found} = Log.add(:ses, :bad, {:ses, "nope"}, %{type: "x", log: "y"})
 
     # # insert good, verify email status changed
-    %{id: d_id} = insert(:mailer_dispatch, status: :pending, sender_id: "someid")
+    %{id: d_id} = insert(:mailer_dispatch, status: :pending, sender_id: "ses:someid")
 
     assert {:ok, ^d_id} =
-             Log.add(:ses, :aborted, "someid", %{type: :bouncing, log: %{reason: "x"}})
+             Log.add(:ses, :aborted, {:dispatch_id, d_id}, %{type: :bouncing, log: %{reason: "x"}})
 
     %{status: :aborted} = Dispatch.one!(d_id)
 
@@ -27,7 +27,7 @@ defmodule Rivet.Mailer.Test.Dispatch.LogTest do
     log =
       ExUnit.CaptureLog.capture_log(fn ->
         assert {:ok, ^d_id} =
-                 Log.add(:ses, :bogus, "someid", %{type: :bogus, log: %{reason: "x"}})
+                 Log.add(:ses, :bogus, {:ses, "someid"}, %{type: :bogus, log: %{reason: "x"}})
       end)
 
     assert log =~ ~r/Unable to update Mailer.Dispatch: status is invalid/
