@@ -21,6 +21,7 @@ defmodule Rivet.Mailer.Template.Send do
   end
 
   ##############################################################################
+  # coveralls-ignore-start
   defp deliver(%Swoosh.Email{} = e, :dev) do
     Logger.warning("rivet_mailer.mode=dev; not sending message", to: e.to, from: e.from)
 
@@ -45,6 +46,8 @@ defmodule Rivet.Mailer.Template.Send do
     # simulate AWS SES
     {:ok, %{request_id: "email disabled", id: Ecto.UUID.generate()}}
   end
+
+  # coveralls-ignore-stop
 
   ####
   defp deliver(%Swoosh.Email{} = e, _) do

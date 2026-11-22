@@ -8,6 +8,7 @@ defmodule Rivet.Mailer.Sub do
   typed_schema "mailer_subs" do
     field(:allow, :boolean)
     field(:class, :string)
+    field(:tags, {:array, :string}, default: [])
 
     belongs_to(:origin, Mailer.Origin, type: :binary_id)
     belongs_to(:user, @user_model, type: :binary_id)
@@ -20,7 +21,7 @@ defmodule Rivet.Mailer.Sub do
     required: [:user_id, :origin_id, :allow, :class],
     # only for migration
     create: [:inserted_at, :updated_at],
-    update: [:allow]
+    update: [:allow, :tags]
 
   # todo: unsub/sub variant
   def subscribe(user_id, origin_id, class) do

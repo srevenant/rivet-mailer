@@ -11,9 +11,9 @@ defmodule Rivet.Mailer.Test.Template.IndexTest do
     %{user} = insert(:ident_handle)
     e = insert(:ident_email, user: user)
 
-    expect_queue(FunctionalTemplate, [user], ~r/had its password changed/)
+    expect_queue(FunctionalTemplate, [user], ~r/New email delivered/)
 
-    expect_queue(FunctionalTemplate, ["narf@ridersofthestars.com"], ~r/had its password changed/)
+    expect_queue(FunctionalTemplate, ["narf@ridersofthestars.com"], ~r/New email delivered/)
 
     assert {:error, "Address is not eligible for receiving email (status=bouncing)"} =
              Template.Queue.valid_target(%{e | status: :bouncing}, [])

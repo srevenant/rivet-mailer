@@ -42,8 +42,10 @@ defmodule Rivet.Mailer.Dispatch do
          do: create(Map.merge(attrs, %{template, assigns, target_id, status: :pending}))
   end
 
-  def get_by_sender_id(id) when not_empty_str(id) do
-    from(n in Mailer.Dispatch, where: n.sender_id == ^id, preload: [:target])
-    |> one()
-  end
+  def lookup({:dispatch_id, id}) when is_uuid(id), do: Dispatch.one([id: id], [:target])
+
+  def lookup({:ses, id}) when not_empty_str(id),
+    do: Dispatch.one([sender_id: "ses:#{id}"], [:target])
+
+  # defp update_sender_id()
 end

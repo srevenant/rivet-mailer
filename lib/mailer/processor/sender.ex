@@ -33,6 +33,11 @@ defmodule Rivet.Mailer.Processor.Sender do
     {:dispatched, %{message, sender_id: nil}, []}
   end
 
+  # Swoosh Logger adapter gives us nothing
+  def normalize_result({:ok, %{}}) do
+    {:dispatched, %{sender_id: nil}, []}
+  end
+
   # template hard blowout
   def normalize_result({:stacktrace, e, tb}),
     do: {:aborted, Exception.message(e), trace: Exception.format(:error, e, tb)}

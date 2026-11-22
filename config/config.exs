@@ -67,3 +67,5 @@ config :rivet_mailer, Rivet.Mailer.Test.Repo,
   database: "rivet_mailer_#{config_env()}",
   hostname: "db",
   log: false
+
+config :rivet_mailer, Rivet.Mailer.Local.Backend, adapter: Swoosh.Adapters.Logger

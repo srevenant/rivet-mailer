@@ -1,6 +1,7 @@
 alias Rivet.Mailer.Migrations.Mailer, as: M
 
 [
+  [version: 7, module: M.V07SubscriptionTags],
   [version: 6, module: M.V06Config],
   [version: 5, module: M.V05Template],
   # [version: 4, module: M.V04NotifyCleanup],

@@ -34,6 +34,7 @@ defmodule Rivet.Mailer.CriticalFail do
 
     {:error, log}
   end
+
   # coveralls-ignore-stop
 
   ##############################################################################
@@ -49,6 +50,7 @@ defmodule Rivet.Mailer.CriticalFail do
 
     {:error, error}
   end
+
   # coveralls-ignore-stop
 
   ##############################################################################
@@ -57,6 +59,7 @@ defmodule Rivet.Mailer.CriticalFail do
     with {:ok, %Dispatch{} = d} <- create_dispatch(email_key, assigns),
          do: Mailer.Processor.Sender.send(d)
   end
+
   # coveralls-ignore-stop
 
   def create_dispatch(email_key, assigns) do
