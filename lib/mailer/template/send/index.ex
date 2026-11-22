@@ -8,7 +8,7 @@ defmodule Rivet.Mailer.Template.Send do
          {:ok, %Dispatch{} = d} <- build_context(d),
          {:ok, %Dispatch{} = d} <- Mailer.Template.Eval.generate(d),
          {:ok, %Swoosh.Email{} = e} <- build_email(d),
-         do: deliver(e, Application.get_env(:rivet_mailer, :mode))
+         do: deliver(e, Application.get_env(:rivet_mailer, :mode, :prod))
   end
 
   ##############################################################################
