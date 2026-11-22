@@ -33,11 +33,6 @@ defmodule Rivet.Mailer.Processor.Sender do
     {:dispatched, %{message, sender_id: nil}, []}
   end
 
-  # Swoosh Logger adapter gives us nothing
-  def normalize_result({:ok, %{}}) do
-    {:dispatched, %{sender_id: nil}, []}
-  end
-
   # template hard blowout
   def normalize_result({:stacktrace, e, tb}),
     do: {:aborted, Exception.message(e), trace: Exception.format(:error, e, tb)}
@@ -57,8 +52,9 @@ defmodule Rivet.Mailer.Processor.Sender do
   #   do: {:aborted, "failed to compile template", error: e, traceback: trace}
 
   # {:error, "template missing", []}
-  def normalize_result({:error, message, opts}) when is_binary(message) or is_atom(message),
-    do: {:aborted, to_string(message), opts}
+  def normalize_result({:error, message, opts})
+      when is_binary(message) or (is_atom(message) and is_list(opts)),
+      do: {:aborted, to_string(message), opts}
 
   # unexpected rivet/template/send error
   def normalize_result({:error, error}), do: {:aborted, error, []}
@@ -66,6 +62,10 @@ defmodule Rivet.Mailer.Processor.Sender do
   # Mailer (swoosh) error
   def normalize_result({:error, %{code, message}, moar}),
     do: {:aborted, "#{code}: #{message}", moar}
+
+  # Swoosh Logger adapter gives us nothing (used in test/dev)
+  # coveralls-ignore-next-line
+  def normalize_result({:ok, %{}}), do: {:dispatched, %{sender_id: nil}, []}
 
   # fallback
   def normalize_result(other) do

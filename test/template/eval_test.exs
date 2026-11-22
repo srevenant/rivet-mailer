@@ -20,5 +20,8 @@ defmodule Rivet.Mailer.Test.Template.EvalTest do
 
     assert {:error, "template missing (Narf)"} =
              Eval.generate(%Dispatch{target: %Target{address: "bob"}, template: Narf})
+
+    assert {:error, "Failed to execute" <> _} = Eval.eval(@template <> "=== body\nsomething <%= for a <- @nope do %>", "a@b.com", %{})
+    assert {:error, "Failed to execute" <> _} = Eval.eval(@template <> "=== body\nsomething <%= raise \"nope\" %>", "a@b.com", %{})
   end
 end
