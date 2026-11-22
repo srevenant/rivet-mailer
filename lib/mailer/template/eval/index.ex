@@ -30,7 +30,7 @@ defmodule Rivet.Mailer.Template.Eval do
         {:error, "missing subject or body"}
 
       {:error, _, errors} ->
-        errors = Enum.map(errors, fn %{section, display} -> "#{section}: #{display}" end)
+        errors = Enum.map(errors, fn %{section, display} -> "<#{section}> #{display}" end)
         {:error, "Failed to execute template: #{Enum.join(errors, "; ")}"}
     end
   end
