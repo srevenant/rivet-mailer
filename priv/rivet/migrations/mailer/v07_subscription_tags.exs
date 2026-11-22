@@ -4,7 +4,7 @@ defmodule Rivet.Mailer.Migrations.Mailer.V07SubscriptionTags do
 
   def change do
     alter table(:mailer_subs) do
-      add(:tags, {:array, :"varchar(32)"}, null: false, default_value: [])
+      add(:tags, {:array, :"varchar(32)"}, null: false, default: [])
     end
   end
 end
