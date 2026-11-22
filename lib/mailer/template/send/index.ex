@@ -93,7 +93,13 @@ defmodule Rivet.Mailer.Template.Send do
   end
 
   def get_from(%Dispatch{assigns, from_key}) do
-    key = Enum.map(from_key, &String.to_existing_atom/1)
+    key =
+      try do
+        Enum.map(from_key, &Transmogrify.As.as_existing_atom!/1)
+      rescue
+        _ ->
+          raise "Cannot map from_key to atoms"
+      end
 
     case get_in(assigns, key) do
       [n, e] when not_empty_str(e) -> {:ok, {n, e}}
