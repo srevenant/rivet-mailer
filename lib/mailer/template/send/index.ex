@@ -21,8 +21,15 @@ defmodule Rivet.Mailer.Template.Send do
   end
 
   ##############################################################################
+  defp deliver(%Swoosh.Email{} = e, :prod) do
+    # coveralls-ignore-start
+    Logger.debug("Sending email", to: e.to, from: e.from, subject: e.subject)
+    Rivet.Mailer.Local.Backend.deliver(e)
+    # coveralls-ignore-stop
+  end
+
   # coveralls-ignore-start
-  defp deliver(%Swoosh.Email{} = e, :dev) do
+  defp deliver(%Swoosh.Email{} = e, mode) when mode in [:dev, :test] do
     Logger.warning("rivet_mailer.mode=dev; not sending message", to: e.to, from: e.from)
 
     headers = Enum.map(e.headers, fn {k, v} -> "#{k}: #{v}" end) |> Enum.join("\n")
@@ -48,14 +55,6 @@ defmodule Rivet.Mailer.Template.Send do
   end
 
   # coveralls-ignore-stop
-
-  ####
-  defp deliver(%Swoosh.Email{} = e, _) do
-    # coveralls-ignore-start
-    Logger.debug("Sending email", to: e.to, from: e.from, subject: e.subject)
-    Rivet.Mailer.Local.Backend.deliver(e)
-    # coveralls-ignore-stop
-  end
 
   ##############################################################################
   defp load_assign_configs(assigns, [name | rest]) do
