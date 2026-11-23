@@ -29,6 +29,7 @@ defmodule Rivet.Mailer.MixProject do
       ],
       dialyzer: [
         ignore_warnings: ".dialyzer_ignore.exs",
+        plt_add_apps: [:ex_unit, :mix, :ex_machina],
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
       ],
       elixirc_paths: elixirc_paths(Mix.env()),

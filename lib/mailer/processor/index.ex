@@ -59,6 +59,8 @@ defmodule Rivet.Mailer.Processor do
         batch_size = Mailer.getcfg(:batch_size)
         workers = Mailer.getcfg(:workers)
 
+        Logger.info("Mailer: Processing dispatches", workers: workers, batch_size: batch_size)
+
         Task.Supervisor.async_stream_nolink(
           :mailer_worker_supervisor,
           1..workers,
@@ -72,6 +74,11 @@ defmodule Rivet.Mailer.Processor do
           # coveralls-ignore-next-line
           {:exit, reason} -> CriticalFail.report("Mailer: worker crashed", reason: reason)
         end)
+
+        Logger.info("Mailer: Finished processing dispatches",
+          workers: workers,
+          batch_size: batch_size
+        )
 
         # debug seperator
         # Logger.info("---------------------------------------------------------")

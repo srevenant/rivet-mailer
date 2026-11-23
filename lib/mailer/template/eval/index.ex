@@ -29,14 +29,30 @@ defmodule Rivet.Mailer.Template.Eval do
       {:ok, _} ->
         {:error, "missing subject or body"}
 
-      {:error, _, errors} ->
-        errors = Enum.map(errors, fn %{section, display} -> "<#{section}> #{display}" end)
-        {:error, "Failed to execute template: #{Enum.join(errors, "; ")}"}
+      {:error, {:parse, reason}} ->
+        {:error, "Invalid template: #{format_reason(reason)}"}
+
+      {:error, {:eval, reason, []}} ->
+        {:error, "Eval error: #{format_reason(reason)}"}
+
+      {:error, {:eval, _reason, diags}} ->
+        {:error, "Failed to execute template: #{flatten_diags(diags)}"}
     end
   end
 
-  defp not_empty(value, key) do
+  defp format_reason(reason) when is_binary(reason), do: reason
+  defp format_reason(reason), do: inspect(reason)
+
+  defp flatten_diags(errors) do
+    Enum.map_join(errors, "; ", fn %{section, display} ->
+      "<#{section}> #{display}"
+    end)
+  end
+
+  defp not_empty(value, key) when is_binary(value) do
     value = String.trim(value)
     if not_empty_str(value), do: {:ok, value}, else: {:error, "empty #{key}"}
   end
+
+  defp not_empty(_, key), do: {:error, "invalid #{key}"}
 end

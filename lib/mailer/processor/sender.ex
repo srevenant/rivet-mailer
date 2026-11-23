@@ -53,7 +53,7 @@ defmodule Rivet.Mailer.Processor.Sender do
 
   # {:error, "template missing", []}
   def normalize_result({:error, message, opts})
-      when is_binary(message) or (is_atom(message) and is_list(opts)),
+      when (is_binary(message) or is_atom(message)) and is_list(opts),
       do: {:aborted, to_string(message), opts}
 
   # unexpected rivet/template/send error
@@ -172,10 +172,10 @@ defmodule Rivet.Mailer.Processor.Sender do
 
   ##############################################################################
   defp build_dispatch_update_(:dispatched = status, %{sender_id}) do
-    {:ok, Map.merge(%{lock: nil, sent_at: DateTime.utc_now()}, %{status, sender_id}),
+    {:ok, %{status, sender_id, lock: nil, locked_at: nil, sent_at: DateTime.utc_now()},
      {status, %{message: "dispatched"}}}
   end
 
   defp build_dispatch_update_(status, log),
-    do: {:ok, %{status, lock: nil}, {status, log}}
+    do: {:ok, %{status, lock: nil, locked_at: nil}, {status, log}}
 end

@@ -26,9 +26,9 @@ defmodule Rivet.Mailer.Test.Processor.BatchTest do
         assert {:ok, [:ok]} = Processor.Batch.process(10, 1)
       end)
 
-    assert log =~ ~r/Processing pending dispatches - count=1 pending=1/
+    assert log =~ ~r/Worker processing dispatches - count=1 pending=1/
     assert log =~ ~r/Mailer: email dispatched.*dispatch_id=#{d.id}/
-    assert log =~ ~r/Mailer: Finished processing dispatches/
+    assert log =~ ~r/Mailer: Worker finished processing dispatches/
 
     assert {:ok, %{sent_at, status: :dispatched, lock: nil}} = Dispatch.one(id: d.id)
 

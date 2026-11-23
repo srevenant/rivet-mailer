@@ -6,7 +6,7 @@ defmodule Rivet.Mailer.Processor.Batch do
     if Mailer.getcfg(:enabled) do
       case DispatchLib.get_batch(batch_size) do
         {:ok, lock, count, ids} when count > 0 ->
-          Logger.info("Mailer: Processing pending dispatches",
+          Logger.info("Mailer: Worker processing dispatches",
             count: count,
             pending: pending,
             lock: lock
@@ -14,7 +14,7 @@ defmodule Rivet.Mailer.Processor.Batch do
 
           map = Enum.map(ids, &process_send_timed/1)
 
-          Logger.info("Mailer: Finished processing dispatches", lock: lock)
+          Logger.info("Mailer: Worker finished processing dispatches", lock: lock)
 
           {:ok, map}
 

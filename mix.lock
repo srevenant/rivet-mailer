@@ -45,7 +45,7 @@
   "quic": {:hex, :quic, "3.3.0", "4a55908709f9d5f21f9e38a1bbd136a5756e202e6ee89ed5b74b5db069721482", [:rebar3], [{:idna, "~> 8.0", [hex: :idna, repo: "hexpm", optional: false]}], "hexpm", "8be3af3c8fe9b11a60c7443c6173019264dd2147da62759bc772cd9233e16bec"},
   "random_password": {:hex, :random_password, "1.3.0", "526afd3548a7618f60571af88fef0b04d94aeb1b4cb6b02147757dbf54e1f5cb", [:mix], [{:puid, "~> 2.0", [hex: :puid, repo: "hexpm", optional: false]}], "hexpm", "1f853535671b2dc1594736c924f32b71be4aadf0271736887b46a54c0b3bc025"},
   "rivet": {:git, "https://github.com/srevenant/rivet/", "9c3aaf663a6e725ed3fd714d96169696ebc69552", [branch: "mailer-updates"]},
-  "rivet_engram": {:git, "https://github.com/srevenant/rivet-engram/", "2ff51ad9525f87eff800c54fc87263b3f335906f", [branch: "master"]},
+  "rivet_engram": {:git, "https://github.com/srevenant/rivet-engram/", "93073d196ad4e6c2fb308c12862b24cff364bbe7", [branch: "master"]},
   "rivet_ident": {:git, "https://github.com/srevenant/rivet-ident/", "0efdb9acd2f8447a1c632ec309134b2f4842b40b", [branch: "mailer-updates"]},
   "rivet_utils": {:git, "https://github.com/srevenant/rivet-utils/", "5e9d7a9b19c9db389f0b863bfd6693b7edb4ea31", [branch: "v3"]},
   "rustler": {:hex, :rustler, "0.38.0", "7a8906998ff0d28e3021c0a73264abcda719bda344b2e58307c6805b0f87c9b4", [:mix], [{:jason, "~> 1.0", [hex: :jason, repo: "hexpm", optional: false]}], "hexpm", "704c03c1bf66be12b031c5a389347b91c81c5cb819a24b068b0de36fe4a5652a"},
