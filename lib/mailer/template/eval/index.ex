@@ -10,7 +10,7 @@ defmodule Rivet.Mailer.Template.Eval do
              do: {:ok, %{d | subject, body, engram}}
 
       {:error, :not_found} ->
-        {:error, "template missing (#{inspect(d.template)})"}
+        {:error, "Template missing (#{inspect(d.template)})"}
     end
   end
 
@@ -27,7 +27,7 @@ defmodule Rivet.Mailer.Template.Eval do
              do: {:ok, %{en | sections: %{en.sections | subject, body}}}
 
       {:ok, _} ->
-        {:error, "missing subject or body"}
+        {:error, "Missing subject or body"}
 
       {:error, {:parse, reason}} ->
         {:error, "Invalid template: #{format_reason(reason)}"}
@@ -51,8 +51,8 @@ defmodule Rivet.Mailer.Template.Eval do
 
   defp not_empty(value, key) when is_binary(value) do
     value = String.trim(value)
-    if not_empty_str(value), do: {:ok, value}, else: {:error, "empty #{key}"}
+    if not_empty_str(value), do: {:ok, value}, else: {:error, "Empty #{key}"}
   end
 
-  defp not_empty(_, key), do: {:error, "invalid #{key}"}
+  defp not_empty(_, key), do: {:error, "Invalid #{key} as it is not a string"}
 end

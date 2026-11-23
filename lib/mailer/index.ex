@@ -29,6 +29,8 @@ defmodule Rivet.Mailer do
   @doc """
   iex> 5000 = getcfg(:batch_size)
   iex> 1 = getcfg(:workers)
+  iex> :ok = setcfg(:workers, 2)
+  iex> 2 = getcfg(:workers)
   """
   def getcfg(key), do: Application.get_env(:rivet_mailer, key)
 
